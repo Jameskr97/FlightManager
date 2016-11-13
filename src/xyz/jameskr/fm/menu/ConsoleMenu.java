@@ -10,6 +10,7 @@ public class ConsoleMenu {
 
     private ArrayList<String> menuOptions;
     private Scanner input;
+    private String header;
 
 
     /**
@@ -18,6 +19,7 @@ public class ConsoleMenu {
     public ConsoleMenu(){
         menuOptions = new ArrayList<>();
         input = new Scanner(System.in);
+        this.header = "Enter a number to select your choice.";
     }
 
     /**
@@ -30,15 +32,20 @@ public class ConsoleMenu {
             menuOptions.add(opt.getID(), opt.getDescription());
     }
 
-    public void addOption(String option) {
-        this.menuOptions.add(option);
+    public ConsoleMenu(String header){
+        this();
+        this.header = header;
+    }
+
+    public void addOption(int index, String option) {
+        this.menuOptions.add(index, option);
     }
 
     /**
      * Print all the menu options with their corresponding selection number
      */
     public void printOptions(){
-        System.out.println("\nEnter a number to select your choice.\n=====================================");
+        System.out.printf("\n%s\n=====================================\n", header);
         for (int i = 0; i < menuOptions.size(); i++){
             System.out.println(String.format("%d: %s", i + 1, menuOptions.get(i)));
         }

@@ -1,5 +1,6 @@
 package xyz.jameskr.fm;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -17,6 +18,12 @@ public class Util {
      */
     public static String getInput(){
         Scanner scan = new Scanner(System.in);
-        return scan.next();
+        return scan.nextLine();
     }
+
+    public static void safeWait(){
+        Scanner scan = new Scanner(System.in);
+        scan.nextLine();
+    }
+
 }

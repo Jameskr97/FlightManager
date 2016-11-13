@@ -23,7 +23,7 @@ public class Main {
                 schedule.clearSchedule();
 
             } else if (x == MainMenuOptions.MANAGE_AIRLINES.getID()){
-                System.out.println("Option not implemented yet.");
+                schedule.manageAirlines();
 
             } else if (x == MainMenuOptions.ADD_FLIGHT.getID()){
                 System.out.println("Option not implemented yet.");
