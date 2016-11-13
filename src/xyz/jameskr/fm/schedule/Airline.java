@@ -9,5 +9,23 @@ import java.util.ArrayList;
 public class Airline {
     private String name;
     private String code;
-    private ArrayList<Aircraft> aircrafts;
+    private Aircraft aircraft;
+
+    public Airline(String name, String code){
+        this.name = name;
+        this.code = code;
+        this.aircraft = Aircraft.DEFAULT_AIRCRAFT;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAirlineCode() {
+        return code;
+    }
+
+    public Aircraft getAircraft() {
+        return aircraft;
+    }
 }
