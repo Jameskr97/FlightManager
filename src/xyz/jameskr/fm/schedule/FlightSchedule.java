@@ -1,4 +1,6 @@
-package xyz.jameskr.fm;
+package xyz.jameskr.fm.schedule;
+
+import xyz.jameskr.fm.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;

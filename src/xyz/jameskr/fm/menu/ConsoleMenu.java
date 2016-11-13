@@ -1,4 +1,4 @@
-package xyz.jameskr.fm;
+package xyz.jameskr.fm.menu;
 
 import java.util.ArrayList;
 import java.util.Scanner;

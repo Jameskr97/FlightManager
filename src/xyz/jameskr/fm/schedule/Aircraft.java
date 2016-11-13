@@ -1,4 +1,4 @@
-package xyz.jameskr.fm;
+package xyz.jameskr.fm.schedule;
 
 /**
  * @author James 

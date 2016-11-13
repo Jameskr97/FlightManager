@@ -1,5 +1,9 @@
 package xyz.jameskr.fm;
 
+import xyz.jameskr.fm.menu.ConsoleMenu;
+import xyz.jameskr.fm.menu.MainMenuOptions;
+import xyz.jameskr.fm.schedule.FlightSchedule;
+
 public class Main {
 
     public static void main(String[] args) {

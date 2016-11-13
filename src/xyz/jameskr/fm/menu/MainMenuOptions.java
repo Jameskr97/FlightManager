@@ -1,4 +1,4 @@
-package xyz.jameskr.fm;
+package xyz.jameskr.fm.menu;
 
 /**
  * TODO: Convert to class format for more abstraction.
