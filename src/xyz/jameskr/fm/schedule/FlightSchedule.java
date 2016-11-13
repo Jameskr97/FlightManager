@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * Class which stores information about flight schedule.
+ *
  * @author James 
  * @date 11/13/16
  */
@@ -38,6 +40,10 @@ public class FlightSchedule {
 
 
     // AIRLINE MANAGEMENT
+
+    /**
+     * Presents menu to manage airlines
+     */
     public void manageAirlines() {
         ConsoleMenu menu = new ConsoleMenu("Manage airline menu");
         menu.addOption(0, "List Airlines");
@@ -63,6 +69,9 @@ public class FlightSchedule {
 
     }
 
+    /**
+     * List all the airlines currently in database
+     */
     private void listAirlines() {
         if (airlines.size() == 0) {
             System.out.println("There are no airlines.");
@@ -74,6 +83,9 @@ public class FlightSchedule {
         }
     }
 
+    /**
+     * Add an airline using the Interrogator class.
+     */
     private void addAirline() {
         // Get airline name and code...
         Interrogator asker = new Interrogator();

@@ -13,34 +13,34 @@ public class Main {
         ConsoleMenu menu = new ConsoleMenu(MainMenuOptions.values());
 
 
-        while(true){
+        while (true) {
             menu.printOptions();
             int x = menu.getResponse();
-            if (x == MainMenuOptions.SET_CLOCK.getID()){
+            if (x == MainMenuOptions.SET_CLOCK.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if (x == MainMenuOptions.RESET_SCHEDULE.getID()){
+            } else if (x == MainMenuOptions.RESET_SCHEDULE.getID()) {
                 schedule.clearSchedule();
 
-            } else if (x == MainMenuOptions.MANAGE_AIRLINES.getID()){
+            } else if (x == MainMenuOptions.MANAGE_AIRLINES.getID()) {
                 schedule.manageAirlines();
 
-            } else if (x == MainMenuOptions.ADD_FLIGHT.getID()){
+            } else if (x == MainMenuOptions.ADD_FLIGHT.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if (x == MainMenuOptions.CANCEL_FLIGHT.getID()){
+            } else if (x == MainMenuOptions.CANCEL_FLIGHT.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if (x == MainMenuOptions.SHOW_FLIGHT_INFO.getID()){
+            } else if (x == MainMenuOptions.SHOW_FLIGHT_INFO.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if (x == MainMenuOptions.SHOW_DEPART.getID()){
+            } else if (x == MainMenuOptions.SHOW_DEPART.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if (x == MainMenuOptions.SHOW_ARRIVAL.getID()){
+            } else if (x == MainMenuOptions.SHOW_ARRIVAL.getID()) {
                 System.out.println("Option not implemented yet.");
 
-            } else if(x == MainMenuOptions.EXIT.getID()){
+            } else if (x == MainMenuOptions.EXIT.getID()) {
                 System.out.println("Saving...");
                 System.out.println("Thanks for using JFlightManager");
                 System.exit(0);

@@ -1,6 +1,8 @@
 package xyz.jameskr.fm.schedule;
 
 /**
+ * Stores information about a flight.
+ *
  * @author James 
  * @date 11/12/16
  */

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- *
  * Class for asking questions, getting input, and returning answers to source.
  *
  * @author James 
@@ -12,13 +11,31 @@ import java.util.Scanner;
  */
 public class Interrogator {
 
+    /**
+     * Array for questions.
+     */
     private ArrayList<String> questions;
+
+    /**
+     * Array for error messages if the question is answered with invalid response.
+     */
     private ArrayList<String> invalidResponse;
+
+    /**
+     * Array for verifiers. Define when addQuestion is called to allow for different verification implementations for each method.
+     */
     private ArrayList<VerifyResponse> verifiers;
+
+    /**
+     * Scanner for input.
+     */
     private Scanner scanner;
 
 
-    public Interrogator(){
+    /**
+     * Initializes above variables.
+     */
+    public Interrogator() {
         // CONSIDER: Maybe a class format would be better than three arraylists?
         questions = new ArrayList<>();
         invalidResponse = new ArrayList<>();
@@ -26,21 +43,44 @@ public class Interrogator {
         scanner = new Scanner(System.in);
     }
 
-    public void addQuestion(int index, String question, String invalid, VerifyResponse verifier){
+
+    /**
+     * Adds a question to be asked once ask() method is called.
+     *
+     * @param index    Order of question to be asked. Not strictly necessary, but makes clear when question will be asked.
+     * @param question Question to ask to user.
+     * @param verifier Anonymous class (used as lambda) in order to let the call location define if it is a valid response
+     */
+    public void addQuestion(int index, String question, VerifyResponse verifier) {
+        this.addQuestion(index, question, "Invalid Response", verifier);
+    }
+
+    /**
+     * Same function as above, but allows for custom invalid message.
+     *
+     * @param invalid Error message to use if verifier returns false (i.e if the response is invalid)
+     */
+    public void addQuestion(int index, String question, String invalid, VerifyResponse verifier) {
         questions.add(index, question);
         invalidResponse.add(index, invalid);
         verifiers.add(index, verifier);
     }
 
-    public String[] ask(){
+    /**
+     * Asks questions in "questions" array list, gathers response, validates response through validator,
+     * and if the response is invalid, ask user if they want to try again, or stop.
+     *
+     * @return Returns null if user didn't want to try again, or string array of responses in the correct order.
+     */
+    public String[] ask() {
         ArrayList<String> answers = new ArrayList<>();
-        for(int i = 0; i < questions.size(); i++){
-            boolean validResponse = false;
+        for (int i = 0; i < questions.size(); i++) {
+            boolean validResponse;
             String questionResponse;
             do {
                 questionResponse = askQuestion(questions.get(i));
                 validResponse = verifiers.get(i).verify(questionResponse);
-                if (!validResponse){
+                if (!validResponse) {
                     System.out.print(invalidResponse.get(i) + " Try again? (y/n): ");
                     String tryAgainResponse = scanner.nextLine();
                     if (tryAgainResponse.equals("n"))
@@ -53,12 +93,25 @@ public class Interrogator {
         return answers.toArray(new String[answers.size()]);
     }
 
-    public String askQuestion(String question){
+    /**
+     * Asks question in array.
+     * <p>
+     * TODO: Consider remove this method and moving it directly inside ask() method.
+     *
+     * @param question Question to ask
+     * @return Response to question
+     */
+    public String askQuestion(String question) {
         System.out.printf("%s", question);
         return scanner.nextLine();
     }
 
 
+    /**
+     * Functional interface which is used in addQuestion method, intended to be used as lambda,
+     * in order to allow the response verification process to be defined where the
+     * addQuestion method is called.
+     */
     public interface VerifyResponse {
         boolean verify(String response);
     }
