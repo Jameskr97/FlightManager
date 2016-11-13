@@ -4,6 +4,8 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Welcome to JFlightManager. By James ");
+
+        FlightSchedule schedule = new FlightSchedule();
         ConsoleMenu menu = new ConsoleMenu(MainMenuOptions.values());
 
 
@@ -14,9 +16,9 @@ public class Main {
                 System.out.println("Option not implemented yet.");
 
             } else if (x == MainMenuOptions.RESET_SCHEDULE.getID()){
-                System.out.println("Option not implemented yet.");
+                schedule.clearSchedule();
 
-            } else if (x == MainMenuOptions.ADD_AIRLINE.getID()){
+            } else if (x == MainMenuOptions.MANAGE_AIRLINES.getID()){
                 System.out.println("Option not implemented yet.");
 
             } else if (x == MainMenuOptions.ADD_FLIGHT.getID()){
@@ -43,7 +45,5 @@ public class Main {
 
 
     }
-
-
 
 }

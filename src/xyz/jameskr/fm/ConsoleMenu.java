@@ -12,14 +12,20 @@ public class ConsoleMenu {
     private Scanner input;
 
 
+    /**
+     * ConsoleMenu default constructor.
+     */
     public ConsoleMenu(){
         menuOptions = new ArrayList<>();
         input = new Scanner(System.in);
-
     }
 
+    /**
+     *
+     * @param options MainMenuOptions array
+     */
     public ConsoleMenu(MainMenuOptions[] options) {
-        this();
+        this(); // Calls the above constructor.
         for (MainMenuOptions opt : options)
             menuOptions.add(opt.getID(), opt.getDescription());
     }
@@ -59,6 +65,7 @@ public class ConsoleMenu {
 
             if (res == -1) printOptions();
         } while (res == -1); // Keep doing the above if the answer is not what we want.
+        System.out.println(); // New line for spacing
         return res;
     }
 

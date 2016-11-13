@@ -1,12 +1,12 @@
 package xyz.jameskr.fm;
 
 /**
- * Created by James on 11/12/16.
+ * TODO: Convert to class format for more abstraction.
  */
 public enum MainMenuOptions {
     SET_CLOCK(0, "Set Clock"),
     RESET_SCHEDULE(1, "Reset Schedule"),
-    ADD_AIRLINE(2, "Add Airline"),
+    MANAGE_AIRLINES(2, "Manage Airlines"),
     ADD_FLIGHT(3, "Add Flight"),
     CANCEL_FLIGHT(4, "Cancel Flight"),
     SHOW_FLIGHT_INFO(5, "Show Flight Information"),
