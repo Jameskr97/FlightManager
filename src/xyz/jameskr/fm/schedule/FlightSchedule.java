@@ -25,9 +25,12 @@ public class FlightSchedule {
         airlines.add(1, new Airline("James Air", "JA"));
     }
 
-    public void clearSchedule() {
 
-        System.out.print("Are you sure you want to delete all flights?\n↦ ");
+    /**
+     * Clear all flights from the dictionary.
+     */
+    public void clearSchedule() {
+        System.out.print("Are you sure you want to delete all flights? (y/n) \n↦ ");
         String response = Util.getInput();
         if (response.equals("y") || response.equals("yes")) {
             flights.clear();
@@ -37,10 +40,7 @@ public class FlightSchedule {
         }
 
     }
-
-
-    // AIRLINE MANAGEMENT
-
+    
     /**
      * Presents menu to manage airlines
      */
