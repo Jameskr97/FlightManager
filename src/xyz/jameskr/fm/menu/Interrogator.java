@@ -81,8 +81,11 @@ public class Interrogator {
      * @return Returns null if user didn't want to try again, or string array of responses in the correct order.
      */
     public String[] ask() {
+        boolean operationCanceled = false;
+
         ArrayList<String> answers = new ArrayList<>();
         for (int i = 0; i < questions.size(); i++) {
+            if (operationCanceled) break;
             boolean validResponse;
             String questionResponse;
             do {
@@ -91,13 +94,20 @@ public class Interrogator {
                 if (!validResponse) {
                     System.out.print(invalidResponse.get(i) + " Try again? (y/n): ");
                     String tryAgainResponse = scanner.nextLine();
-                    if (tryAgainResponse.equals("n"))
-                        return null;
+                    if (tryAgainResponse.equals("n")) {
+                        operationCanceled = true;
+                        break;
+                    }
                 }
             } while (!validResponse);
             answers.add(i, questionResponse);
-
         }
+
+        if(operationCanceled){
+            System.out.println("Operation canceled.");
+            return null;
+        }
+
         return answers.toArray(new String[answers.size()]);
     }
 
@@ -107,7 +117,7 @@ public class Interrogator {
      * @param question Question to ask
      * @return Response to question
      */
-    public String askQuestion(String question) {
+    private String askQuestion(String question) {
         //TODO: Consider remove this method and moving it directly inside ask() method.
         System.out.printf("%s", question);
         return scanner.nextLine();
