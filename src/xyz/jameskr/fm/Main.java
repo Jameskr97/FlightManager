@@ -1,7 +1,6 @@
 package xyz.jameskr.fm;
 
 import xyz.jameskr.fm.menu.ConsoleMenu;
-import xyz.jameskr.fm.menu.MainMenuOptions;
 import xyz.jameskr.fm.schedule.FlightSchedule;
 import xyz.jameskr.fm.schedule.enums.FlightStatus;
 
@@ -10,37 +9,49 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Welcome to JFlightManager. By James ");
         FlightSchedule schedule = new FlightSchedule();
-        ConsoleMenu menu = new ConsoleMenu(MainMenuOptions.values());
+
+        String[] options = {
+                "Set Clock",
+                "Reset Schedule",
+                "Manage Airlines",
+                "Add Flight",
+                "Cancel Flight",
+                "Show Flight Information",
+                "Show Departures",
+                "Show Arrivals",
+                "Close Application"
+        };
+        ConsoleMenu menu = new ConsoleMenu(options);
 
 
         while (true) {
             menu.printOptions();
             int x = menu.getResponse();
-            if (x == MainMenuOptions.SET_CLOCK.getID()) {
+            if (x == 0) {
                 schedule.setTime();
-
-            } else if (x == MainMenuOptions.RESET_SCHEDULE.getID()) {
+                
+            } else if (x == 1) {
                 schedule.clearSchedule();
 
-            } else if (x == MainMenuOptions.MANAGE_AIRLINES.getID()) {
+            } else if (x == 2) {
                 schedule.manageAirlines();
 
-            } else if (x == MainMenuOptions.ADD_FLIGHT.getID()) {
+            } else if (x == 3) {
                 schedule.addFlight();
 
-            } else if (x == MainMenuOptions.CANCEL_FLIGHT.getID()) {
+            } else if (x == 4) {
                 schedule.cancelFlight();
 
-            } else if (x == MainMenuOptions.SHOW_FLIGHT_INFO.getID()) {
+            } else if (x == 5) {
                 schedule.getFlightInformation();
 
-            } else if (x == MainMenuOptions.SHOW_DEPART.getID()) {
+            } else if (x == 6) {
                 schedule.showStatusInformation(FlightStatus.DEPARTED);
 
-            } else if (x == MainMenuOptions.SHOW_ARRIVAL.getID()) {
+            } else if (x == 7) {
                 schedule.showStatusInformation(FlightStatus.ARRIVED);
 
-            } else if (x == MainMenuOptions.EXIT.getID()) {
+            } else if (x == 8) {
                 System.out.println("Saving...");
                 System.out.println("Thanks for using JFlightManager");
                 System.exit(0);

@@ -1,6 +1,7 @@
 package xyz.jameskr.fm.menu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -34,10 +35,9 @@ public class ConsoleMenu {
      *
      * @param options MainMenuOptions array
      */
-    public ConsoleMenu(MainMenuOptions[] options) {
+    public ConsoleMenu(String[] options) {
         this(); // Calls the above constructor.
-        for (MainMenuOptions opt : options)
-            menuOptions.add(opt.getID(), opt.getDescription());
+        Collections.addAll(menuOptions, options);
     }
 
     public ConsoleMenu(String header) {
