@@ -14,7 +14,7 @@ TODO
     * [x] Add Airlines
     * [x] Remove Airlines
 * [x] Add Flight
-* [ ] Remove Flight
+* [x] Cancel Flight
 * [x] Show Flight Information
 * [ ] Show Departures (from specified airport)
 * [ ] Show Arrivals (from specified airport)
