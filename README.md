@@ -12,10 +12,10 @@ TODO
 * [x] Manage Airline
     * [x] List Airlines
     * [x] Add Airlines
-    * [x] Remove Airlines
+    * [ ] Remove Airlines
 * [x] Add Flight
 * [x] Cancel Flight
 * [x] Show Flight Information
 * [x] Show Departures (from specified airport)
-* [ ] Show Arrivals (from specified airport)
+* [x] Show Arrivals (from specified airport)
 * [ ] Find flights between two airports
