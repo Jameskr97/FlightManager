@@ -8,7 +8,6 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Welcome to JFlightManager. By James ");
-
         FlightSchedule schedule = new FlightSchedule();
         ConsoleMenu menu = new ConsoleMenu(MainMenuOptions.values());
 
@@ -26,7 +25,7 @@ public class Main {
                 schedule.manageAirlines();
 
             } else if (x == MainMenuOptions.ADD_FLIGHT.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.addFlight();
 
             } else if (x == MainMenuOptions.CANCEL_FLIGHT.getID()) {
                 System.out.println("Option not implemented yet.");

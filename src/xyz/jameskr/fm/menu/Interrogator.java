@@ -49,10 +49,20 @@ public class Interrogator {
      *
      * @param index    Order of question to be asked. Not strictly necessary, but makes clear when question will be asked.
      * @param question Question to ask to user.
+     */
+    public void addQuestion(int index, String question) {
+        this.addQuestion(index, question, "Invalid Response.", (response, pastResponses) -> true);
+    }
+
+    /**
+     * Same as above function, but allows for custom verification
+     *
+     * @param index    Order of question to be asked. Not strictly necessary, but makes clear when question will be asked.
+     * @param question Question to ask to user.
      * @param verifier Anonymous class (used as lambda) in order to let the call location define if it is a valid response
      */
     public void addQuestion(int index, String question, VerifyResponse verifier) {
-        this.addQuestion(index, question, "Invalid Response", verifier);
+        this.addQuestion(index, question, "Invalid Response.", verifier);
     }
 
     /**
@@ -79,7 +89,7 @@ public class Interrogator {
             String questionResponse;
             do {
                 questionResponse = askQuestion(questions.get(i));
-                validResponse = verifiers.get(i).verify(questionResponse);
+                validResponse = verifiers.get(i).verify(questionResponse, answers.toArray(new String[answers.size()]));
                 if (!validResponse) {
                     System.out.print(invalidResponse.get(i) + " Try again? (y/n): ");
                     String tryAgainResponse = scanner.nextLine();
@@ -113,6 +123,6 @@ public class Interrogator {
      * addQuestion method is called.
      */
     public interface VerifyResponse {
-        boolean verify(String response);
+        boolean verify(String response, String[] pastResponses);
     }
 }

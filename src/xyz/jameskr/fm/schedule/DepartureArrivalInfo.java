@@ -7,7 +7,30 @@ package xyz.jameskr.fm.schedule;
  * @date 11/12/16
  */
 public class DepartureArrivalInfo {
-    private String airportGate, airportCode;
+    private String airportCode, airportGate;
     private char dayOfWeek;
     private int time;
+
+    public DepartureArrivalInfo(String code, String gate, char dayOfWeek, int time) {
+        this.airportCode = code;
+        this.airportGate = gate;
+        this.dayOfWeek = dayOfWeek;
+        this.time = time;
+    }
+
+    public String getAirportCode() {
+        return airportCode;
+    }
+
+    public String getAirportGate() {
+        return airportGate;
+    }
+
+    public char getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public int getTime() {
+        return time;
+    }
 }

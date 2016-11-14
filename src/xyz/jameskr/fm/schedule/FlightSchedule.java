@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class FlightSchedule {
     private int currentTime;
     private ArrayList<Airline> airlines;
-    private HashMap<String, Flight> flights;
+    private HashMap<String, Flight> flights; // Flight code, flight
 
     public FlightSchedule() {
         airlines = new ArrayList<>();
@@ -40,7 +40,7 @@ public class FlightSchedule {
         }
 
     }
-    
+
     /**
      * Presents menu to manage airlines
      */
@@ -89,7 +89,7 @@ public class FlightSchedule {
     private void addAirline() {
         // Get airline name and code...
         Interrogator asker = new Interrogator();
-        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", response -> {
+        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> {
             boolean canProceed = true; // As in "Can Proceed to next question."
             for (Airline a : airlines) {
                 if (a.getName().equals(response)) {
@@ -100,7 +100,7 @@ public class FlightSchedule {
             return canProceed;
         });
 
-        asker.addQuestion(1, "Enter Airline code: ", "Airline code already exists.", response -> {
+        asker.addQuestion(1, "Enter Airline code: ", "Airline code already exists.", (response, pastResponses) -> {
             boolean canProceed = true; // As in "Can Proceed to next question."
             for (Airline a : airlines) {
                 if (a.getAirlineCode().equals(response)) {
@@ -125,6 +125,84 @@ public class FlightSchedule {
         System.out.println(airline.getAircraft());
         System.out.printf("%s sucessfully added. Press enter to continue.", airline.getName());
         Util.safeWait();
+    }
+
+    public void addFlight() {
+        Interrogator interro = new Interrogator();
+        interro.addQuestion(0, "Enter Airline code: ", "Airline code does not exist.", (response, pastResponses) -> {
+            boolean exists = false;
+            for (Airline a : airlines) {
+                if (a.getAirlineCode().equals(response)) {
+                    exists = true;
+                    break;
+                }
+            }
+            return exists;
+        });
+
+        interro.addQuestion(1, "Enter flight number: ", "Flight number already exists.", (response, pastResponses) -> {
+            String airlineCode = pastResponses[0];
+            String flightCode = airlineCode + response;
+            if (flights.containsKey(flightCode))
+                return false;
+            return true;
+        });
+
+        interro.addQuestion(2, "Enter flight type (D -> Domestic, I -> International): ", (response, pastResponses) -> {
+            boolean validResponse = false;
+            if (response.equalsIgnoreCase("d") || response.equalsIgnoreCase("i"))
+                validResponse = true;
+            return validResponse;
+        });
+
+        interro.addQuestion(3, "Enter departure airport code: ", "Airport code does not exist.", (response, pastResponses) -> true);
+        interro.addQuestion(4, "Enter departure gate: ", "Incorrect format.", (response, pastResponses) -> true); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(5, "Enter departure day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
+        interro.addQuestion(6, "Enter departure time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
+        interro.addQuestion(7, "Enter arrival airport code: ", "Airport code does not exist.", (response, pastResponses) -> true);
+        interro.addQuestion(8, "Enter arrival gate: ", "Incorrect format.", (response, pastResponses) -> true); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(9, "Enter arrival day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
+        interro.addQuestion(10, "Enter arrival time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
+
+        String[] res = interro.ask();
+        Airline airline = this.getAirline(res[0]);
+        int flightNum = Integer.parseInt(res[1]);
+        char flightType = res[2].charAt(0);
+        DepartureArrivalInfo departInfo = new DepartureArrivalInfo(res[3], res[4], res[5].charAt(0), Integer.valueOf(res[6]));
+        DepartureArrivalInfo arrivalInfo = new DepartureArrivalInfo(res[7], res[8], res[9].charAt(0), Integer.valueOf(res[10]));
+
+        Flight flight = new Flight(airline, flightNum, flightType, departInfo, arrivalInfo);
+        flights.put(flight.getFlightCode(), flight);
+
+        System.out.printf("Flight %s scheduled successfully.\n", flight.getFlightCode());
+    }
+
+    private boolean isDayOfWeekChar(String dayOfWeek) {
+        if (dayOfWeek.length() != 1) return false;
+        char day = dayOfWeek.toUpperCase().charAt(0);
+        return (day == 'U' || day == 'M' || day == 'T' || day == 'W' || day == 'R' || day == 'F' || day == 'S');
+    }
+
+    private boolean isValidTime(String timeString) {
+        if (timeString.length() != 4) return false;
+        int hour, minute;
+        try {
+            minute = Integer.valueOf(timeString.substring(0, 2));
+            hour = Integer.valueOf(timeString.substring(2));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        if (0 > hour || hour > 12) return false;
+        if (0 > minute || minute > 60) return false;
+        return false;
+    }
+
+    private Airline getAirline(String iataCode) {
+        for (Airline a : airlines) {
+            if (a.getAirlineCode().equalsIgnoreCase(iataCode))
+                return a;
+        }
+        return null; // Because of verification this should never happen.
     }
 
 }
