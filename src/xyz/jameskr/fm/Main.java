@@ -34,7 +34,7 @@ public class Main {
                 schedule.getFlightInformation();
 
             } else if (x == MainMenuOptions.SHOW_DEPART.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.showDepartureInformation();
 
             } else if (x == MainMenuOptions.SHOW_ARRIVAL.getID()) {
                 System.out.println("Option not implemented yet.");

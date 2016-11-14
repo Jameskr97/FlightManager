@@ -68,7 +68,7 @@ public class Flight {
      *
      * @return Status of flight
      */
-    public char getFlightStatus() {
+    public char getStatus() {
         return flightStatus;
     }
 
@@ -77,7 +77,7 @@ public class Flight {
      *
      * @param flightStatus new flight flightStatus
      */
-    public void setFlightStatus(FlightStatus status) {
+    public void setStatus(FlightStatus status) {
         this.flightStatus = status.getStatusChar();
     }
 
@@ -88,5 +88,13 @@ public class Flight {
      */
     public String getFlightCode() {
         return airline.getAirlineCode() + flightNumber;
+    }
+
+    public DepartureArrivalInfo getDepartInfo() {
+        return departureInfo;
+    }
+
+    public DepartureArrivalInfo getArriveInfo() {
+        return arrivalInfo;
     }
 }
