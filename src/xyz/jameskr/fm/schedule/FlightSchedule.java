@@ -18,9 +18,20 @@ import java.util.HashMap;
 public class FlightSchedule {
 
     private int currentTime;
+
+    /**
+     * ArrayList to track all current airlines
+     */
     private ArrayList<Airline> airlines;
+
+    /**
+     * Map to store every flight
+     */
     private HashMap<String, Flight> flights; // Flight code, flight
 
+    /**
+     * Class Constructor. Initializes above variables and adds sample data for faster testing.
+     */
     public FlightSchedule() {
         airlines = new ArrayList<>();
         flights = new HashMap<>();
@@ -96,7 +107,7 @@ public class FlightSchedule {
     private void addAirline() {
         // Get airline name and code...
         Interrogator asker = new Interrogator();
-        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> this.doesAirlineExist(response));
+        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> this.airlineExistsValidator(response));
 
         asker.addQuestion(1, "Enter Airline code: ", "Airline code already exists.", (response, pastResponses) -> {
             boolean canProceed = true; // As in "Can Proceed to next question."
@@ -175,9 +186,12 @@ public class FlightSchedule {
         System.out.printf("Flight %s scheduled successfully.\n", flight.getFlightCode());
     }
 
+    /**
+     * Cancels flights that are in the database
+     */
     public void cancelFlight() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
+        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
         String[] res = ask.ask();
         String flightNum = String.join("", res);
@@ -186,17 +200,20 @@ public class FlightSchedule {
         confirm.addQuestion(0, String.format("Are you sure you want to cancel flight %s? (y/n) ", flightNum), (response, pastResponses) -> this.booleanResponseValidator(response));
         String[] ans = confirm.ask();
 
-        if (ans[0].equalsIgnoreCase("y")){
+        if (ans[0].equalsIgnoreCase("y")) {
             flights.get(flightNum).setFlightStatus(FlightStatus.CANCELED);
             System.out.printf("Flight %s canceled.\n", flightNum);
         } else {
             System.out.printf("Flight %s unchanged.\n", flightNum);
         }
-}
+    }
 
+    /**
+     * Prints flight information based on given airline code and flight number
+     */
     public void getFlightInformation() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
+        ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
 
         String[] response = ask.ask();
@@ -204,11 +221,23 @@ public class FlightSchedule {
         flights.get(flightID).printFlightInfo();
     }
 
-    private boolean booleanResponseValidator(String response){
+    /**
+     * Validator which verifies response is either "y" or "n"
+     *
+     * @param response User input
+     * @return true if response is valid
+     */
+    private boolean booleanResponseValidator(String response) {
         return (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("n"));
     }
 
-    private boolean doesAirlineExist(String iataCode) {
+    /**
+     * Validator to check if a given airline exists
+     *
+     * @param iataCode airline iata code
+     * @return true if response is valid
+     */
+    private boolean airlineExistsValidator(String iataCode) {
         boolean canProceed = true;
         for (Airline a : airlines) {
             if (a.getName().equals(iataCode)) {
@@ -264,5 +293,4 @@ public class FlightSchedule {
         }
         return null; // Because of verification this should never happen.
     }
-
 }
