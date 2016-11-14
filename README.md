@@ -7,7 +7,7 @@ Assignment: http://www.c-jump.com/bcc/c157c/Week10hw/Week10hw.html
 
 TODO
 ====
-* [ ] Set Clock
+* [x] Set Clock
 * [x] Clear Schedule
 * [x] Manage Airline
     * [x] List Airlines
