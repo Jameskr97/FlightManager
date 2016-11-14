@@ -28,7 +28,7 @@ public class Main {
                 schedule.addFlight();
 
             } else if (x == MainMenuOptions.CANCEL_FLIGHT.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.cancelFlight();
 
             } else if (x == MainMenuOptions.SHOW_FLIGHT_INFO.getID()) {
                 schedule.getFlightInformation();

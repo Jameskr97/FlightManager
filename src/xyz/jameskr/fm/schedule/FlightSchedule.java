@@ -3,6 +3,7 @@ package xyz.jameskr.fm.schedule;
 import xyz.jameskr.fm.Util;
 import xyz.jameskr.fm.menu.ConsoleMenu;
 import xyz.jameskr.fm.menu.Interrogator;
+import xyz.jameskr.fm.schedule.enums.FlightStatus;
 import xyz.jameskr.fm.schedule.enums.FlightType;
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ public class FlightSchedule {
         flights.put("JA4321", new Flight(this.getAirline("JA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A19", 'M', 1200), new DepartureArrivalInfo("BOS", "A19", 'M', 1300)));
 
     }
-
 
     /**
      * Clear all flights from the dictionary.
@@ -121,7 +121,7 @@ public class FlightSchedule {
         System.out.printf("%s sucessfully added. Press enter to continue.", airline.getName());
         Util.safeWait();
     }
-    
+
     /**
      * Add a flight using the Interrogator class.
      */
@@ -175,6 +175,25 @@ public class FlightSchedule {
         System.out.printf("Flight %s scheduled successfully.\n", flight.getFlightCode());
     }
 
+    public void cancelFlight() {
+        Interrogator ask = new Interrogator();
+        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
+        ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
+        String[] res = ask.ask();
+        String flightNum = String.join("", res);
+
+        Interrogator confirm = new Interrogator();
+        confirm.addQuestion(0, String.format("Are you sure you want to cancel flight %s? (y/n) ", flightNum), (response, pastResponses) -> this.booleanResponseValidator(response));
+        String[] ans = confirm.ask();
+
+        if (ans[0].equalsIgnoreCase("y")){
+            flights.get(flightNum).setFlightStatus(FlightStatus.CANCELED);
+            System.out.printf("Flight %s canceled.\n", flightNum);
+        } else {
+            System.out.printf("Flight %s unchanged.\n", flightNum);
+        }
+}
+
     public void getFlightInformation() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
@@ -183,6 +202,10 @@ public class FlightSchedule {
         String[] response = ask.ask();
         String flightID = String.join("", response);
         flights.get(flightID).printFlightInfo();
+    }
+
+    private boolean booleanResponseValidator(String response){
+        return (response.equalsIgnoreCase("y") || response.equalsIgnoreCase("n"));
     }
 
     private boolean doesAirlineExist(String iataCode) {
