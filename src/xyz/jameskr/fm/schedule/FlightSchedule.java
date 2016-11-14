@@ -121,8 +121,7 @@ public class FlightSchedule {
         System.out.printf("%s sucessfully added. Press enter to continue.", airline.getName());
         Util.safeWait();
     }
-
-
+    
     /**
      * Add a flight using the Interrogator class.
      */
@@ -179,12 +178,10 @@ public class FlightSchedule {
     public void getFlightInformation() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
-        ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> {
-            String airlineCode = pastResponses[0];
-            return flights.containsKey(airlineCode + response);
-        });
+        ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
 
-        String flightID = String.join("", ask.ask());
+        String[] response = ask.ask();
+        String flightID = String.join("", response);
         flights.get(flightID).printFlightInfo();
     }
 
