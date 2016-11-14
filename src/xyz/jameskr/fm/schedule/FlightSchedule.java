@@ -17,7 +17,15 @@ import java.util.HashMap;
  */
 public class FlightSchedule {
 
+    /**
+     * Current time
+     */
     private int currentTime;
+
+    /**
+     * Current Day of week
+     */
+    private char dayOfWeek;
 
     /**
      * ArrayList to track all current airlines
@@ -33,6 +41,8 @@ public class FlightSchedule {
      * Class Constructor. Initializes above variables and adds sample data for faster testing.
      */
     public FlightSchedule() {
+        currentTime = 1200;
+        dayOfWeek = 'M';
         airlines = new ArrayList<>();
         flights = new HashMap<>();
         airlines.add(0, new Airline("Delta Air", "DA"));
@@ -41,6 +51,25 @@ public class FlightSchedule {
         //Adding sample flight data
         flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A11", 'M', 1200), new DepartureArrivalInfo("BOS", "A11", 'M', 1300)));
         flights.put("JA4321", new Flight(this.getAirline("JA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A19", 'M', 1200), new DepartureArrivalInfo("BOS", "A19", 'M', 1300)));
+
+    }
+
+    /**
+     * Sets the current time.
+     */
+    public void setTime(){
+        Interrogator asker = new Interrogator();
+        asker.addQuestion(0, "Enter new day of week: ", "That is not a valid day of the week", (response, pastResponses) -> this.isDayOfWeekChar(response));
+        asker.addQuestion(1, "Enter new 24 hour time: ", "That is not a valid 24 hour time.", (response, pastResponses) -> this.isValidTime(response));
+        String[] response = asker.ask();
+        if (response == null){
+            System.out.println("Operation canceled");
+            return;
+        }
+        this.dayOfWeek = response[0].charAt(0);
+        this.currentTime = Integer.valueOf(response[1]);
+        System.out.printf("Day set to %c and time set to %d.\nPress Enter to continue.", this.dayOfWeek, this.currentTime);
+        Util.safeWait();
 
     }
 

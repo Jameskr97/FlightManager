@@ -16,7 +16,7 @@ public class Main {
             menu.printOptions();
             int x = menu.getResponse();
             if (x == MainMenuOptions.SET_CLOCK.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.setTime();
 
             } else if (x == MainMenuOptions.RESET_SCHEDULE.getID()) {
                 schedule.clearSchedule();
