@@ -11,18 +11,27 @@ public enum FlightType {
     INTERNATIONAL("International", 'I');
 
     private String description;
-    private char type;
+    private char typeChar;
 
     FlightType(String desc, char type) {
         this.description = desc;
-        this.type = type;
+        this.typeChar = type;
     }
 
     public String getDesc() {
         return description;
     }
 
-    public char getType() {
-        return type;
+    public char getTypeChar() {
+        return typeChar;
+    }
+
+    public static String getDesc(char type) {
+        for (FlightType t : FlightType.values()) {
+            if (t.getTypeChar() == type) {
+                return t.getDesc();
+            }
+        }
+        return null; // Should never happen if this FlightType enum is always used.
     }
 }

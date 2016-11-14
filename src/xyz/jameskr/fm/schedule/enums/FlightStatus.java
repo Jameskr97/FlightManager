@@ -28,4 +28,13 @@ public enum FlightStatus {
         return statusChar;
     }
 
+    public static String getDesc(char statusChar) {
+        for (FlightStatus s : FlightStatus.values()) {
+            if (s.getStatusChar() == statusChar) {
+                return s.getDesc();
+            }
+        }
+        return null; // Should never happen if this FlightStatus enum is always used.
+    }
+
 }
