@@ -3,6 +3,7 @@ package xyz.jameskr.fm;
 import xyz.jameskr.fm.menu.ConsoleMenu;
 import xyz.jameskr.fm.menu.MainMenuOptions;
 import xyz.jameskr.fm.schedule.FlightSchedule;
+import xyz.jameskr.fm.schedule.enums.FlightStatus;
 
 public class Main {
 
@@ -34,10 +35,10 @@ public class Main {
                 schedule.getFlightInformation();
 
             } else if (x == MainMenuOptions.SHOW_DEPART.getID()) {
-                schedule.showDepartureInformation();
+                schedule.showStatusInformation(FlightStatus.DEPARTED);
 
             } else if (x == MainMenuOptions.SHOW_ARRIVAL.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.showStatusInformation(FlightStatus.ARRIVED);
 
             } else if (x == MainMenuOptions.EXIT.getID()) {
                 System.out.println("Saving...");

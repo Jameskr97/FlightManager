@@ -53,8 +53,7 @@ public class FlightSchedule {
         flights.put("DA2468", new Flight(this.getAirline("DA"), 2468, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A15", 'M', 1430), new DepartureArrivalInfo("BOS", "A15", 'M', 1500)));
         flights.put("DA1357", new Flight(this.getAirline("DA"), 1357, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A17", 'M', 1530), new DepartureArrivalInfo("BOS", "A14", 'M', 1600)));
         flights.put("DA3579", new Flight(this.getAirline("DA"), 3579, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A19", 'M', 1630), new DepartureArrivalInfo("BOS", "A11", 'M', 1700)));
-        flights.get("DA1234").setStatus(FlightStatus.CANCELED);
-        setTime('M', 1425);
+        setTime('M', 1435);
 
     }
 
@@ -82,7 +81,7 @@ public class FlightSchedule {
      * Sets the time to the given parameters, and modifies the states of the flights in array based off of the given time.
      *
      * @param dayOfWeek New day of the week
-     * @param timeNow New time
+     * @param timeNow   New time
      */
     private void setTime(char dayOfWeek, int timeNow) {
         this.dayOfWeek = dayOfWeek;
@@ -306,9 +305,11 @@ public class FlightSchedule {
     }
 
     /**
-     * Presents sorted departure information
+     * Displays flight status info based on status parameter
+     * @param status Status to show, (must be arrived or departed)
      */
-    public void showDepartureInformation() {
+    public void showStatusInformation(FlightStatus status) {
+        if (status != FlightStatus.DEPARTED && status != FlightStatus.ARRIVED) return;
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airport code: ", "Invalid code.", (response, pastResponses) -> response.length() == 3);
         ask.addQuestion(1, "Enter day: ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
@@ -316,17 +317,21 @@ public class FlightSchedule {
         String airportCode = res[0];
         char dayOfWeek = res[1].charAt(0);
 
-        // Get all flights that depart from given gate.
+        // Get all flights that depart/arrive from given gate.
         ArrayList<Flight> dFlights = new ArrayList<>();
         for (String flightID : flights.keySet()) {
             Flight f = flights.get(flightID);
-            if (f.getDepartInfo().getAirportCode().equalsIgnoreCase(airportCode) && f.getDepartInfo().getDayOfWeek() == dayOfWeek
-                    && f.getStatus() != FlightStatus.ARRIVED.getStatusChar())
+
+            // The following line gets departInfo if parameter is status DEPARTED and arriveInfo if parameter is status Arrived.
+            DepartureArrivalInfo statusInfo = (status == FlightStatus.DEPARTED ? f.getDepartInfo() : f.getArriveInfo());
+            if (statusInfo.getAirportCode().equalsIgnoreCase(airportCode)
+                    && statusInfo.getDayOfWeek() == dayOfWeek
+                    && f.getStatus() != (status == FlightStatus.DEPARTED ? FlightStatus.DEPARTED.getStatusChar() : FlightStatus.ARRIVED.getStatusChar()))
                 dFlights.add(f);
         }
 
         if (dFlights.size() == 0) {
-            System.out.printf("There are no flights departing %s.\n", airportCode);
+            System.out.printf("There are no flights %s %s.\n", (status == FlightStatus.DEPARTED ? "departing from" : "arriving to"), airportCode);
             return;
         }
 
@@ -334,16 +339,19 @@ public class FlightSchedule {
         dFlights = sortFlights(dFlights, true);
 
 
-        System.out.printf("Current time is %d. %s departures:\n", this.currentTime, airportCode);
-        System.out.printf("==================================================\n");
+        System.out.printf("Current time is %d. %s %s:\n", this.currentTime, airportCode, (status == FlightStatus.DEPARTED ? "departures" : "arrivals"));
+        System.out.printf("====================================================\n");
         System.out.printf("Flight Code\t\tStatus\tTime\tDestination\tGate\n");
-        System.out.printf("==================================================\n");
-        for (Flight f : dFlights)
-            System.out.printf("%s\t\t\t%c\t\t%d\t\t\t%s\t%s\n", f.getFlightCode(), f.getStatus(), f.getDepartInfo().getTime(), f.getDepartInfo().getAirportCode(), f.getDepartInfo().getAirportGate());
-        System.out.printf("==================================================\n");
+        System.out.printf("====================================================\n");
+        for (Flight f : dFlights) {
+            DepartureArrivalInfo info = (status == FlightStatus.DEPARTED ? f.getDepartInfo() : f.getArriveInfo());
+            System.out.printf("%s\t\t\t%s\t\t%d\t\t\t%s\t%s\n", f.getFlightCode(), f.getStatus(), info.getTime(), info.getAirportCode(), info.getAirportGate());
+        }
+        System.out.printf("====================================================\n");
         System.out.print("Press Enter to continue...");
         Util.safeWait();
     }
+
 
     /**
      * Validator which verifies response is either "y" or "n"
@@ -421,7 +429,7 @@ public class FlightSchedule {
     /**
      * Sort an ArrayList of Flight objects based on time.
      *
-     * @param flight ArrayList of flight objects
+     * @param flight    ArrayList of flight objects
      * @param ascending If it should be ascending or decending.
      * @return
      */
@@ -429,7 +437,7 @@ public class FlightSchedule {
         for (int i = flight.size() - 1; i >= 0; i--) {
             for (int j = 1; j <= i; j++) {
                 boolean flag;
-                if(ascending)
+                if (ascending)
                     flag = (flight.get(j - 1).getDepartInfo().getTime() > flight.get(j).getDepartInfo().getTime());
                 else
                     flag = (flight.get(j - 1).getDepartInfo().getTime() < flight.get(j).getDepartInfo().getTime());
