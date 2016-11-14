@@ -15,7 +15,7 @@ TODO
     * [x] Remove Airlines
 * [x] Add Flight
 * [ ] Remove Flight
-* [ ] Show Flight Information
+* [x] Show Flight Information
 * [ ] Show Departures (from specified airport)
 * [ ] Show Arrivals (from specified airport)
 * [ ] Find flights between two airports
