@@ -14,6 +14,7 @@ import java.util.HashMap;
  * @date 11/13/16
  */
 public class FlightSchedule {
+
     private int currentTime;
     private ArrayList<Airline> airlines;
     private HashMap<String, Flight> flights; // Flight code, flight
@@ -127,6 +128,10 @@ public class FlightSchedule {
         Util.safeWait();
     }
 
+
+    /**
+     * Add a flight using the Interrogator class.
+     */
     public void addFlight() {
         Interrogator interro = new Interrogator();
         interro.addQuestion(0, "Enter Airline code: ", "Airline code does not exist.", (response, pastResponses) -> {
@@ -177,12 +182,24 @@ public class FlightSchedule {
         System.out.printf("Flight %s scheduled successfully.\n", flight.getFlightCode());
     }
 
+    /**
+     * Verifies the entered day of week.
+     *
+     * @param dayOfWeek Single char for day of week
+     * @return true if dayOfWeek is valid char
+     */
     private boolean isDayOfWeekChar(String dayOfWeek) {
         if (dayOfWeek.length() != 1) return false;
         char day = dayOfWeek.toUpperCase().charAt(0);
         return (day == 'U' || day == 'M' || day == 'T' || day == 'W' || day == 'R' || day == 'F' || day == 'S');
     }
 
+    /**
+     * Verifies the entered time.
+     *
+     * @param timeString
+     * @return true if timeString is valid time
+     */
     private boolean isValidTime(String timeString) {
         if (timeString.length() != 4) return false;
         int hour, minute;
@@ -197,6 +214,12 @@ public class FlightSchedule {
         return false;
     }
 
+    /**
+     * Looks through airlines find the one with the given IATA code.
+     *
+     * @param iataCode IATA code of airline
+     * @return Airline with corresponding IATA code.
+     */
     private Airline getAirline(String iataCode) {
         for (Airline a : airlines) {
             if (a.getAirlineCode().equalsIgnoreCase(iataCode))

@@ -11,7 +11,6 @@ public class Airline {
     private String code;
     private Aircraft aircraft;
 
-
     /**
      * Airline constructor. Name and code defined here so they remain constant.
      *

@@ -28,6 +28,9 @@ public class Aircraft {
      */
     private int passengerCapacity;
 
+    /**
+     * Class Constructor
+     */
     public Aircraft() {
         this.model = "Boeing 777-9";
         this.cargoCapacity = 5330;

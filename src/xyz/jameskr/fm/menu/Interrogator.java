@@ -31,7 +31,6 @@ public class Interrogator {
      */
     private Scanner scanner;
 
-
     /**
      * Initializes above variables.
      */
@@ -42,7 +41,6 @@ public class Interrogator {
         verifiers = new ArrayList<>();
         scanner = new Scanner(System.in);
     }
-
 
     /**
      * Adds a question to be asked once ask() method is called.
@@ -105,17 +103,15 @@ public class Interrogator {
 
     /**
      * Asks question in array.
-     * <p>
-     * TODO: Consider remove this method and moving it directly inside ask() method.
      *
      * @param question Question to ask
      * @return Response to question
      */
     public String askQuestion(String question) {
+        //TODO: Consider remove this method and moving it directly inside ask() method.
         System.out.printf("%s", question);
         return scanner.nextLine();
     }
-
 
     /**
      * Functional interface which is used in addQuestion method, intended to be used as lambda,
