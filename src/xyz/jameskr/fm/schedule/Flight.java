@@ -21,8 +21,20 @@ public class Flight {
      * Departure and arrival information for the flight
      */
     private DepartureArrivalInfo departureInfo, arrivalInfo;
+
+    /**
+     * Flight number
+     */
     private int flightNumber;
+
+    /**
+     * Flight status
+     */
     private char flightStatus;
+
+    /**
+     * Flight type
+     */
     private char flightType;
 
     /**
@@ -43,6 +55,9 @@ public class Flight {
         this.flightStatus = FlightStatus.SCHEDULED.getStatusChar();
     }
 
+    /**
+     * Prints all information about this flight to the console
+     */
     public void printFlightInfo() {
         System.out.printf("Flight: %s\n", this.getFlightCode());
         System.out.printf("Type: %s\n", FlightType.getDesc(this.flightType));
@@ -90,11 +105,30 @@ public class Flight {
         return airline.getAirlineCode() + flightNumber;
     }
 
+    /**
+     * Depart info getter
+     *
+     * @return depart info
+     */
     public DepartureArrivalInfo getDepartInfo() {
         return departureInfo;
     }
 
+    /**
+     * Arrive info getter
+     *
+     * @return arrive info
+     */
     public DepartureArrivalInfo getArriveInfo() {
         return arrivalInfo;
+    }
+
+    /**
+     * Airline getter
+     *
+     * @return airline
+     */
+    public Airline getAirline() {
+        return airline;
     }
 }

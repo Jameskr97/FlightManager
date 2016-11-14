@@ -160,7 +160,7 @@ public class FlightSchedule {
             } else if (res == 1) {
                 this.addAirline();
             } else if (res == 2) {
-                System.out.println("Option not implemented yet.");
+                this.removeAirline();
             } else if (res == 3) {
                 System.out.println("Returning...");
                 break;
@@ -214,6 +214,39 @@ public class FlightSchedule {
         System.out.println(airline.getAircraft());
         System.out.printf("%s sucessfully added. Press enter to continue.", airline.getName());
         Util.safeWait();
+    }
+
+    /**
+     * Remove an airline and all related flights.
+     */
+    private void removeAirline() {
+        Interrogator ask = new Interrogator();
+        ask.addQuestion(0, "Enter airline: ", "Airline does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
+        String[] res1 = ask.ask();
+        if(res1 == null){
+            System.out.println("Operation canceled.");
+            return;
+        }
+        String airline = res1[0];
+
+        Interrogator last = new Interrogator();
+        String question = String.format("Are you sure you want to remove airline %s and all associated flights? (y/n): ", airline);
+        last.addQuestion(0, question, "Invliad boolean response", (response, pastResponses) -> this.booleanResponseValidator(response));
+        String ans = last.ask()[0];
+
+        if (ans.equalsIgnoreCase("y")) {
+            ArrayList<String> flightsToRemove = new ArrayList<>();
+            for (String s : flights.keySet()) {
+                Flight f = flights.get(s);
+                if (f.getAirline().getAirlineCode().equalsIgnoreCase(airline))
+                    flightsToRemove.add(s);
+            }
+            flightsToRemove.forEach(flights::remove);
+            airlines.remove(this.getAirline(airline));
+            System.out.println("Airline deleted.");
+        } else {
+            System.out.println("Airline unchanged.");
+        }
     }
 
     /**
@@ -306,6 +339,7 @@ public class FlightSchedule {
 
     /**
      * Displays flight status info based on status parameter
+     *
      * @param status Status to show, (must be arrived or departed)
      */
     public void showStatusInformation(FlightStatus status) {
@@ -352,7 +386,6 @@ public class FlightSchedule {
         Util.safeWait();
     }
 
-
     /**
      * Validator which verifies response is either "y" or "n"
      *
@@ -370,10 +403,10 @@ public class FlightSchedule {
      * @return true if response is valid
      */
     private boolean airlineExistsValidator(String iataCode) {
-        boolean canProceed = true;
+        boolean canProceed = false;
         for (Airline a : airlines) {
-            if (a.getName().equals(iataCode)) {
-                canProceed = false;
+            if (a.getAirlineCode().equalsIgnoreCase(iataCode)) {
+                canProceed = true;
                 break;
             }
         }
