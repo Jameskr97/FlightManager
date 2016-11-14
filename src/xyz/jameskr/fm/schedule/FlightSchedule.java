@@ -3,6 +3,7 @@ package xyz.jameskr.fm.schedule;
 import xyz.jameskr.fm.Util;
 import xyz.jameskr.fm.menu.ConsoleMenu;
 import xyz.jameskr.fm.menu.Interrogator;
+import xyz.jameskr.fm.schedule.enums.FlightType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,11 @@ public class FlightSchedule {
         flights = new HashMap<>();
         airlines.add(0, new Airline("Delta Air", "DA"));
         airlines.add(1, new Airline("James Air", "JA"));
+
+        //Adding sample flight data
+        flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A11", 'M', 1200), new DepartureArrivalInfo("BOS", "A11", 'M', 1300)));
+        flights.put("JA4321", new Flight(this.getAirline("JA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A19", 'M', 1200), new DepartureArrivalInfo("BOS", "A19", 'M', 1300)));
+
     }
 
 
@@ -90,16 +96,7 @@ public class FlightSchedule {
     private void addAirline() {
         // Get airline name and code...
         Interrogator asker = new Interrogator();
-        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> {
-            boolean canProceed = true; // As in "Can Proceed to next question."
-            for (Airline a : airlines) {
-                if (a.getName().equals(response)) {
-                    canProceed = false;
-                    break;
-                }
-            }
-            return canProceed;
-        });
+        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> this.doesAirlineExist(response));
 
         asker.addQuestion(1, "Enter Airline code: ", "Airline code already exists.", (response, pastResponses) -> {
             boolean canProceed = true; // As in "Can Proceed to next question."
@@ -113,10 +110,7 @@ public class FlightSchedule {
         });
 
         String[] response = asker.ask();
-        if (response == null) { // Will only return null if user responded with "no" to a try again prompt
-            System.out.println("Operation canceled.");
-            return;
-        }
+        if (response == null) return;
 
         // Create airline...
         Airline airline = new Airline(response[0], response[1]);
@@ -180,6 +174,29 @@ public class FlightSchedule {
         flights.put(flight.getFlightCode(), flight);
 
         System.out.printf("Flight %s scheduled successfully.\n", flight.getFlightCode());
+    }
+
+    public void getFlightInformation() {
+        Interrogator ask = new Interrogator();
+        ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.doesAirlineExist(response));
+        ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> {
+            String airlineCode = pastResponses[0];
+            return flights.containsKey(airlineCode + response);
+        });
+
+        String flightID = String.join("", ask.ask());
+        flights.get(flightID).printFlightInfo();
+    }
+
+    private boolean doesAirlineExist(String iataCode) {
+        boolean canProceed = true;
+        for (Airline a : airlines) {
+            if (a.getName().equals(iataCode)) {
+                canProceed = false;
+                break;
+            }
+        }
+        return canProceed;
     }
 
     /**

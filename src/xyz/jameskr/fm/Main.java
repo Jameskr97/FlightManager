@@ -31,7 +31,7 @@ public class Main {
                 System.out.println("Option not implemented yet.");
 
             } else if (x == MainMenuOptions.SHOW_FLIGHT_INFO.getID()) {
-                System.out.println("Option not implemented yet.");
+                schedule.getFlightInformation();
 
             } else if (x == MainMenuOptions.SHOW_DEPART.getID()) {
                 System.out.println("Option not implemented yet.");
