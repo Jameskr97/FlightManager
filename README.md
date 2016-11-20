@@ -18,4 +18,4 @@ TODO
 * [x] Show Flight Information
 * [x] Show Departures (from specified airport)
 * [x] Show Arrivals (from specified airport)
-* [ ] Find flights between two airports
+* [x] Find flights between two airports

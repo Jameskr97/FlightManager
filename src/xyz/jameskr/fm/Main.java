@@ -52,7 +52,7 @@ public class Main {
                 schedule.showStatusInformation(FlightStatus.ARRIVED);
 
             } else if (x == 8) {
-                System.out.println("Option not yet implemented");
+                schedule.findConnectingFlights();
 
             } else if (x == 9) {
                 System.out.println("Saving...");

@@ -1,6 +1,8 @@
 package xyz.jameskr.fm.schedule;
 
 import xyz.jameskr.fm.Util;
+import xyz.jameskr.fm.graph.ConnectingFlightData;
+import xyz.jameskr.fm.graph.Graph;
 import xyz.jameskr.fm.menu.ConsoleMenu;
 import xyz.jameskr.fm.menu.Interrogator;
 import xyz.jameskr.fm.schedule.enums.Day;
@@ -9,6 +11,7 @@ import xyz.jameskr.fm.schedule.enums.FlightType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class which stores information about flight schedule.
@@ -48,12 +51,13 @@ public class FlightSchedule {
         airlines.add(1, new Airline("James Air", "JA"));
 
         //Adding sample flight data
-        flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A11", 'M', 1200), new DepartureArrivalInfo("BOS", "A19", 'M', 1300)));
-        flights.put("DA4321", new Flight(this.getAirline("DA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A13", 'M', 1330), new DepartureArrivalInfo("BOS", "A17", 'M', 1400)));
-        flights.put("DA2468", new Flight(this.getAirline("DA"), 2468, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A15", 'M', 1430), new DepartureArrivalInfo("BOS", "A15", 'M', 1500)));
-        flights.put("DA1357", new Flight(this.getAirline("DA"), 1357, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A17", 'M', 1530), new DepartureArrivalInfo("BOS", "A14", 'M', 1600)));
-        flights.put("DA3579", new Flight(this.getAirline("DA"), 3579, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("BOS", "A19", 'M', 1630), new DepartureArrivalInfo("BOS", "A11", 'M', 1700)));
-        setTime('M', 1435);
+        flights.put("DA1235", new Flight(this.getAirline("DA"), 1235, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1100), new DepartureArrivalInfo("QRS", "A19", 'M', 1130)));
+        flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1200), new DepartureArrivalInfo("JKR", "A19", 'M', 1300)));
+        flights.put("DA4321", new Flight(this.getAirline("DA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("JKR", "A13", 'M', 1330), new DepartureArrivalInfo("XYZ", "A17", 'M', 1400)));
+        flights.put("DA2468", new Flight(this.getAirline("DA"), 2468, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A15", 'M', 1430), new DepartureArrivalInfo("DEF", "A15", 'M', 1500)));
+        flights.put("DA1357", new Flight(this.getAirline("DA"), 1357, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("DEF", "A17", 'M', 1530), new DepartureArrivalInfo("PED", "A14", 'M', 1600)));
+        flights.put("DA3579", new Flight(this.getAirline("DA"), 3579, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("PED", "A19", 'M', 1642), new DepartureArrivalInfo("XYZ", "A11", 'M', 1700)));
+        setTime('M', 1100);
 
     }
 
@@ -512,5 +516,115 @@ public class FlightSchedule {
         }
         return flight;
     }
-    
+
+    private List<ConnectingFlightData> sortFlights(List<ConnectingFlightData> cdf, boolean ascending) {
+        for (int i = cdf.size() - 1; i >= 0; i--) {
+            for (int j = 1; j <= i; j++) {
+                boolean flag;
+                if (ascending)
+                    flag = (cdf.get(j - 1).getLayoverTime() > cdf.get(j).getLayoverTime());
+                else
+                    flag = (cdf.get(j - 1).getLayoverTime() < cdf.get(j).getLayoverTime());
+
+                if (flag) {
+                    ConnectingFlightData c = cdf.get(j - 1);
+                    cdf.set(j - 1, cdf.get(j));
+                    cdf.set(j, c);
+                }
+
+            }
+        }
+        return cdf;
+    }
+
+    public void findConnectingFlights() {
+        Interrogator ask = new Interrogator();
+        ask.addQuestion(0, "Enter origin airport: ", "There are no flights departing that airport.", (response, pastResponses) -> {
+            boolean hasDeparting = false;
+            for (String s : flights.keySet()) {
+                Flight f = flights.get(s);
+                if (f.getDepartInfo().getAirportCode().equalsIgnoreCase(response)) {
+                    hasDeparting = true;
+                    break;
+                }
+            }
+            return hasDeparting;
+        });
+
+        ask.addQuestion(1, "Enter destination airport: ", "There are no flights arriving at that airport.", (response, pastResponses) -> {
+            boolean hasArriving = false;
+            for (String s : flights.keySet()) {
+                Flight f = flights.get(s);
+                if (f.getArriveInfo().getAirportCode().equalsIgnoreCase(response)) {
+                    hasArriving = true;
+                    break;
+                }
+            }
+            return hasArriving;
+        });
+
+        String[] res = ask.ask();
+        if (res == null) {
+            System.out.println("Operation canceled.");
+            return;
+        }
+
+        Graph graph = new Graph();
+        for (String s : flights.keySet()) {
+            Flight f = flights.get(s);
+            DepartureArrivalInfo depart = f.getDepartInfo(), arrive = f.getArriveInfo();
+            graph.addDirectedConnection(depart.getAirportCode(), arrive.getAirportCode());
+        }
+
+        // Get paths
+        List<List<String>> paths = graph.getAllPaths(res[0], res[1]);
+
+        if (paths.isEmpty()){
+            System.out.printf("No available flights from %s to %s.", res[0], res[1]);
+            return;
+        }
+
+        // Convert of strings, to list of flights
+        List<ConnectingFlightData> flightPaths = new ArrayList<>();
+        for (List<String> strPath : paths) { // For each list of string flight paths
+            ConnectingFlightData data = new ConnectingFlightData();
+            for (int i = 0; i < strPath.size() - 1; i++) {
+                data.addFlight(getFlight(strPath.get(i), strPath.get(i + 1)));
+            }
+            flightPaths.add(data);
+        }
+
+        // If any CFD has one flight, present that flight only
+        for (ConnectingFlightData c : flightPaths) {
+            if (c.getNumberFlights() == 1) {
+                ArrayList<ConnectingFlightData> data = new ArrayList<>();
+                data.add(c);
+                presentConnectingFlights(data);
+                return;
+            }
+        }
+
+        presentConnectingFlights(flightPaths);
+    }
+
+    private void presentConnectingFlights(List<ConnectingFlightData> list) {
+        Flight f = list.get(0).getFlights().get(0); // Any flight should work, they should all start and end in the same place.
+        list = sortFlights(list, true); // Sort flight
+
+        System.out.printf("Current time: %d. Flight from %s to %s.\n", this.currentTime, f.getDepartInfo().getAirportCode(), f.getArriveInfo().getAirportCode());
+        System.out.printf("===========================================\n");
+        System.out.printf("# Flights\tTotal Layover Time\tFlight Path\n");
+        for (ConnectingFlightData data : list)
+            System.out.printf("%d\t\t\t%d minutes\t\t\t%s\n", data.getNumberFlights(), data.getLayoverTime(), data.getFlightOrderString());
+    }
+
+    private Flight getFlight(String departs, String arrives) {
+        for (String s : flights.keySet()) {
+            Flight f = flights.get(s);
+            if (f.getDepartInfo().getAirportCode().equalsIgnoreCase(departs) && f.getArriveInfo().getAirportCode().equalsIgnoreCase(arrives))
+                return f;
+        }
+        return null;
+    }
+
 }
