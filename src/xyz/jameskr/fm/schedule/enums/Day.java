@@ -1,6 +1,8 @@
 package xyz.jameskr.fm.schedule.enums;
 
 /**
+ * Day enum to easily get day as char.
+ *
  * @author James 
  * @date 11/14/16
  */
