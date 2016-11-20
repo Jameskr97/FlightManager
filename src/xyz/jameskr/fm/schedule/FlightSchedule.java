@@ -628,7 +628,7 @@ public class FlightSchedule {
         List<List<String>> paths = graph.getAllPaths(res[0], res[1]);
 
         if (paths.isEmpty()) {
-            System.out.printf("No available flights from %s to %s.", res[0], res[1]);
+            System.out.printf("No available flights from %s to %s.\n", res[0], res[1]);
             return;
         }
 
@@ -640,6 +640,19 @@ public class FlightSchedule {
                 data.addFlight(getFlight(strPath.get(i), strPath.get(i + 1)));
             }
             flightPaths.add(data);
+        }
+
+        // Remove routes with canceled flights
+        ArrayList<ConnectingFlightData> toRemove = new ArrayList<>(); // To prevent concurrent modification exception.
+        for (ConnectingFlightData c : flightPaths)
+            for (Flight f : c.getFlights())
+                if (f.getStatus() == FlightStatus.CANCELED.getStatusChar())
+                    toRemove.add(c);
+        toRemove.forEach(flightPaths::remove);
+
+        if (flightPaths.isEmpty()) {
+            System.out.printf("No available flights from %s to %s.\n", res[0], res[1]);
+            return;
         }
 
         // If any CFD has one flight, present that flight only
