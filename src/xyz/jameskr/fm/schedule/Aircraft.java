@@ -18,36 +18,57 @@ public class Aircraft {
      */
     private String model;
 
-    /**
-     * Maximum square feet of cargo
-     */
-    private int cargoCapacity;
 
     /**
-     * Maximum number of passengers
+     * Maximum number of economy class passengers
      */
-    private int passengerCapacity;
+    private int economyClassPassengers;
+
+    /**
+     * Maximum number of business class passengers
+     */
+    private int businessClassPassengers;
+
+    /**
+     * Maximum number of first class passengers
+     */
+    private int firstClassPassengers;
 
     /**
      * Class Constructor
      */
     public Aircraft() {
         this.model = "Boeing 777-9";
-        this.cargoCapacity = 5330;
-        this.passengerCapacity = 400;
+        this.economyClassPassengers = 250;
+        this.businessClassPassengers = 30;
+        this.firstClassPassengers = 20;
     }
 
     /**
-     * Gets the aircraft name
-     *
-     * @return aircraft name
+     * @return Aircraft name
      */
     public String getName() {
         return model;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Aircraft: %s\nCargo Capacity: %d\nMax Passengers: %d", model, cargoCapacity, passengerCapacity);
+    /**
+     * @return Num. Economy class passengers
+     */
+    public int getEconomyClassPassengers() {
+        return economyClassPassengers;
+    }
+
+    /**
+     * @return Num. Business class passengers
+     */
+    public int getBusinessClassPassengers() {
+        return businessClassPassengers;
+    }
+
+    /**
+     * @return Num. First class passengers
+     */
+    public int getFirstClassPassengers() {
+        return firstClassPassengers;
     }
 }

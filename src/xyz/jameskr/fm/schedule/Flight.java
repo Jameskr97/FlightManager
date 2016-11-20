@@ -62,9 +62,9 @@ public class Flight {
         System.out.printf("Flight: %s\n", this.getFlightCode());
         System.out.printf("Type: %s\n", FlightType.getDesc(this.flightType));
         System.out.printf("Status: %s\n", FlightStatus.getDesc(this.flightStatus));
-//        System.out.printf("First Class Seats: %s\n", flightType);
-//        System.out.printf("Business Class Seats: %s\n", flightType);
-//        System.out.printf("Economy Class Seats: %s\n", flightType);
+        System.out.printf("Economy Class Seats: %s\n", airline.getAircraft().getEconomyClassPassengers());
+        System.out.printf("Business Class Seats: %s\n", airline.getAircraft().getBusinessClassPassengers());
+        System.out.printf("First Class Seats: %s\n", airline.getAircraft().getFirstClassPassengers());
         System.out.printf("Departure day: %s\n", this.departureInfo.getDayOfWeek());
         System.out.printf("Departure time: %s\n", this.departureInfo.getTime());
         System.out.printf("Departure airport: %s\n", this.departureInfo.getAirportCode());
@@ -90,7 +90,7 @@ public class Flight {
     /**
      * Set flight flightStatus
      *
-     * @param flightStatus new flight flightStatus
+     * @param status new flight flightStatus
      */
     public void setStatus(FlightStatus status) {
         this.flightStatus = status.getStatusChar();
