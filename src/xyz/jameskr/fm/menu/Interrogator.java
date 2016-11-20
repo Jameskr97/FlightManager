@@ -43,16 +43,6 @@ public class Interrogator {
     }
 
     /**
-     * Adds a question to be asked once ask() method is called.
-     *
-     * @param index    Order of question to be asked. Not strictly necessary, but makes clear when question will be asked.
-     * @param question Question to ask to user.
-     */
-    public void addQuestion(int index, String question) {
-        this.addQuestion(index, question, "Invalid Response.", (response, pastResponses) -> true);
-    }
-
-    /**
      * Same as above function, but allows for custom verification
      *
      * @param index    Order of question to be asked. Not strictly necessary, but makes clear when question will be asked.
@@ -89,7 +79,8 @@ public class Interrogator {
             boolean validResponse;
             String questionResponse;
             do {
-                questionResponse = askQuestion(questions.get(i));
+                System.out.printf("%s", questions.get(i));
+                questionResponse = scanner.nextLine();
                 validResponse = verifiers.get(i).verify(questionResponse, answers.toArray(new String[answers.size()]));
                 if (!validResponse) {
                     System.out.print(invalidResponse.get(i) + " Try again? (y/n): ");
@@ -105,18 +96,6 @@ public class Interrogator {
 
         if (operationCanceled) return null;
         return answers.toArray(new String[answers.size()]);
-    }
-
-    /**
-     * Asks question in array.
-     *
-     * @param question Question to ask
-     * @return Response to question
-     */
-    private String askQuestion(String question) {
-        //TODO: Consider remove this method and moving it directly inside ask() method.
-        System.out.printf("%s", question);
-        return scanner.nextLine();
     }
 
     /**
