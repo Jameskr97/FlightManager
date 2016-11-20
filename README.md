@@ -12,7 +12,7 @@ TODO
 * [x] Manage Airline
     * [x] List Airlines
     * [x] Add Airlines
-    * [ ] Remove Airlines
+    * [x] Remove Airlines
 * [x] Add Flight
 * [x] Cancel Flight
 * [x] Show Flight Information
