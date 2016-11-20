@@ -103,11 +103,7 @@ public class Interrogator {
             answers.add(i, questionResponse);
         }
 
-        if(operationCanceled){
-            System.out.println("Operation canceled.");
-            return null;
-        }
-
+        if (operationCanceled) return null;
         return answers.toArray(new String[answers.size()]);
     }
 
@@ -129,6 +125,13 @@ public class Interrogator {
      * addQuestion method is called.
      */
     public interface VerifyResponse {
+
+        /**
+         * @param response      The answer to the question
+         * @param pastResponses all previous answers
+         * @return True if the response is valid. False is the response is not valid.
+         */
         boolean verify(String response, String[] pastResponses);
     }
+    
 }
