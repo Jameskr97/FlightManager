@@ -62,11 +62,11 @@ public class FlightSchedule {
      */
     public void setTime() {
         Interrogator asker = new Interrogator();
-        asker.addQuestion(0, "Enter new day of week: ", "That is not a valid day of the week", (response, pastResponses) -> this.isDayOfWeekChar(response));
+        asker.addQuestion(0, "Enter new day of week: ", "That is not a valid day of the week.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         asker.addQuestion(1, "Enter new 24 hour time: ", "That is not a valid 24 hour time.", (response, pastResponses) -> this.isValidTime(response));
         String[] response = asker.ask();
         if (response == null) {
-            System.out.println("Operation canceled");
+            System.out.println("Operation canceled.");
             return;
         }
         this.dayOfWeek = response[0].charAt(0);
@@ -131,15 +131,16 @@ public class FlightSchedule {
      * Clear all flights from the dictionary.
      */
     public void clearSchedule() {
-        System.out.print("Are you sure you want to delete all flights? (y/n) \n↦ ");
-        String response = Util.getInput();
-        if (response.equals("y") || response.equals("yes")) {
+        Interrogator ask = new Interrogator();
+        ask.addQuestion(0, "Are you sure you want to delete all flights? (y/n): ", "Invalid boolean response.",
+                (response, pastResponses) -> this.booleanResponseValidator(response));
+        String[] response = ask.ask();
+        if (response[0].equalsIgnoreCase("y")) {
             flights.clear();
             System.out.println("Schedule cleared.");
         } else {
             System.out.println("Schedule unchanged.");
         }
-
     }
 
     /**
@@ -190,18 +191,8 @@ public class FlightSchedule {
     private void addAirline() {
         // Get airline name and code...
         Interrogator asker = new Interrogator();
-        asker.addQuestion(0, "Enter Airline Name: ", "Airline name already exists.", (response, pastResponses) -> this.airlineExistsValidator(response));
-
-        asker.addQuestion(1, "Enter Airline code: ", "Airline code already exists.", (response, pastResponses) -> {
-            boolean canProceed = true; // As in "Can Proceed to next question."
-            for (Airline a : airlines) {
-                if (a.getAirlineCode().equals(response)) {
-                    canProceed = false;
-                    break;
-                }
-            }
-            return canProceed;
-        });
+        asker.addQuestion(0, "Enter Airline Name: ", "Airline name is invalid/already exists.", (response, pastResponses) -> !this.airlineNameExistsValidator(response));
+        asker.addQuestion(1, "Enter Airline code: ", "Airline code is invalid/already exists.", (response, pastResponses) -> !this.airlineCodeExistsValidator(response));
 
         String[] response = asker.ask();
         if (response == null) return;
@@ -221,16 +212,16 @@ public class FlightSchedule {
      */
     private void removeAirline() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline: ", "Airline does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
+        ask.addQuestion(0, "Enter airline code: ", "Airline does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
         String[] res1 = ask.ask();
-        if(res1 == null){
+        if (res1 == null) {
             System.out.println("Operation canceled.");
             return;
         }
-        String airline = res1[0];
+        Airline a = this.getAirline(res1[0]);
 
         Interrogator last = new Interrogator();
-        String question = String.format("Are you sure you want to remove airline %s and all associated flights? (y/n): ", airline);
+        String question = String.format("Are you sure you want to remove airline %s and all associated flights? (y/n): ", a.getName());
         last.addQuestion(0, question, "Invliad boolean response", (response, pastResponses) -> this.booleanResponseValidator(response));
         String ans = last.ask()[0];
 
@@ -238,11 +229,11 @@ public class FlightSchedule {
             ArrayList<String> flightsToRemove = new ArrayList<>();
             for (String s : flights.keySet()) {
                 Flight f = flights.get(s);
-                if (f.getAirline().getAirlineCode().equalsIgnoreCase(airline))
+                if (f.getAirline().getAirlineCode().equalsIgnoreCase(a.getAirlineCode()))
                     flightsToRemove.add(s);
             }
             flightsToRemove.forEach(flights::remove);
-            airlines.remove(this.getAirline(airline));
+            airlines.remove(a);
             System.out.println("Airline deleted.");
         } else {
             System.out.println("Airline unchanged.");
@@ -265,13 +256,9 @@ public class FlightSchedule {
             return exists;
         });
 
-        interro.addQuestion(1, "Enter flight number: ", "Flight number already exists.", (response, pastResponses) -> {
-            String airlineCode = pastResponses[0];
-            String flightCode = airlineCode + response;
-            if (flights.containsKey(flightCode))
-                return false;
-            return true;
-        });
+        interro.addQuestion(1, "Enter flight number: ", "Flight number is invalid/already exists.",
+                (response, pastResponses) -> !this.doesFlightIDExist(pastResponses[0] + response));
+
 
         interro.addQuestion(2, "Enter flight type (D -> Domestic, I -> International): ", (response, pastResponses) -> {
             boolean validResponse = false;
@@ -280,16 +267,20 @@ public class FlightSchedule {
             return validResponse;
         });
 
-        interro.addQuestion(3, "Enter departure airport code: ", "Airport code does not exist.", (response, pastResponses) -> true);
-        interro.addQuestion(4, "Enter departure gate: ", "Incorrect format.", (response, pastResponses) -> true); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(3, "Enter departure airport code: ", "Airport code does not exist.", (response, pastResponses) -> this.verifyAirportCode(response));
+        interro.addQuestion(4, "Enter departure gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportCode(response)); // Is it possible for this to have an incorrect format?
         interro.addQuestion(5, "Enter departure day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         interro.addQuestion(6, "Enter departure time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
-        interro.addQuestion(7, "Enter arrival airport code: ", "Airport code does not exist.", (response, pastResponses) -> true);
-        interro.addQuestion(8, "Enter arrival gate: ", "Incorrect format.", (response, pastResponses) -> true); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(7, "Enter arrival airport code: ", "Airport code does not exist.", (response, pastResponses) -> this.verifyAirportCode(response));
+        interro.addQuestion(8, "Enter arrival gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportGate(response)); // Is it possible for this to have an incorrect format?
         interro.addQuestion(9, "Enter arrival day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         interro.addQuestion(10, "Enter arrival time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
 
         String[] res = interro.ask();
+        if (res == null) {
+            System.out.println("Operation Canceled.");
+            return;
+        }
         Airline airline = this.getAirline(res[0]);
         int flightNum = Integer.parseInt(res[1]);
         char flightType = res[2].charAt(0);
@@ -307,13 +298,14 @@ public class FlightSchedule {
      */
     public void cancelFlight() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
+        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
         String[] res = ask.ask();
         String flightNum = String.join("", res);
+        Flight f = flights.get(flightNum);
 
         Interrogator confirm = new Interrogator();
-        confirm.addQuestion(0, String.format("Are you sure you want to cancel flight %s? (y/n) ", flightNum), (response, pastResponses) -> this.booleanResponseValidator(response));
+        confirm.addQuestion(0, String.format("Are you sure you want to cancel flight %s going from %s to %s? (y/n): ", flightNum, f.getDepartInfo().getAirportCode(), f.getArriveInfo().getAirportCode()), (response, pastResponses) -> this.booleanResponseValidator(response));
         String[] ans = confirm.ask();
 
         if (ans[0].equalsIgnoreCase("y")) {
@@ -329,10 +321,14 @@ public class FlightSchedule {
      */
     public void getFlightInformation() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineExistsValidator(response));
+        ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
 
         String[] response = ask.ask();
+        if (response == null) {
+            System.out.println("Operation canceled.");
+            return;
+        }
         String flightID = String.join("", response);
         flights.get(flightID).printFlightInfo();
     }
@@ -402,15 +398,40 @@ public class FlightSchedule {
      * @param iataCode airline iata code
      * @return true if response is valid
      */
-    private boolean airlineExistsValidator(String iataCode) {
-        boolean canProceed = false;
+    private boolean airlineCodeExistsValidator(String iataCode) {
+        iataCode = iataCode.trim();
+        if (iataCode.equals("") || iataCode.length() == 0)
+            return true; // Assume these exists so they will never actually be created.
+        boolean exists = false;
         for (Airline a : airlines) {
             if (a.getAirlineCode().equalsIgnoreCase(iataCode)) {
-                canProceed = true;
+                exists = true;
                 break;
             }
         }
-        return canProceed;
+        return exists;
+    }
+
+    private boolean airlineNameExistsValidator(String airlineName) {
+        airlineName = airlineName.trim();
+        if (airlineName.equals("") || airlineName.length() == 0)
+            return true; // Assume these exists so they will never actually be created.
+        boolean exists = false;
+        for (Airline a : airlines) {
+            if (a.getName().equalsIgnoreCase(airlineName)) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
+    private boolean verifyAirportCode(String code) {
+        return code.length() == 3;
+    }
+
+    private boolean verifyAirportGate(String code) {
+        return code.length() == 3 || code.length() == 4;
     }
 
     /**
@@ -435,14 +456,20 @@ public class FlightSchedule {
         if (timeString.length() != 4) return false;
         int hour, minute;
         try {
-            minute = Integer.valueOf(timeString.substring(0, 2));
-            hour = Integer.valueOf(timeString.substring(2));
+            minute = Integer.valueOf(timeString.substring(2));
+            hour = Integer.valueOf(timeString.substring(0, 2));
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return false;
         }
-        if (0 > hour || hour > 12) return false;
+        if (0 > hour || hour > 24) return false;
         if (0 > minute || minute > 60) return false;
-        return false;
+        return true;
+    }
+
+    private boolean doesFlightIDExist(String flightId) {
+        if (flightId.length() != 6) return false;
+        return flights.containsKey(flightId);
     }
 
     /**
@@ -485,4 +512,5 @@ public class FlightSchedule {
         }
         return flight;
     }
+    
 }
