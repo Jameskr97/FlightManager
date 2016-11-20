@@ -205,7 +205,6 @@ public class FlightSchedule {
         this.airlines.add(airline);
 
         // Print aircraft data and wait for enter press.
-        System.out.println(airline.getAircraft());
         System.out.printf("%s sucessfully added. Press enter to continue.", airline.getName());
         Util.safeWait();
     }
@@ -301,7 +300,21 @@ public class FlightSchedule {
      */
     public void cancelFlight() {
         Interrogator ask = new Interrogator();
-        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
+        ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist or has no flights.", (response, pastResponses) -> {
+            if (this.airlineCodeExistsValidator(response)) {
+                System.out.println("INSIDE");
+                boolean hasFlights = false;
+                for (String s : flights.keySet()) {
+                    Flight f = flights.get(s);
+                    if (f.getAirline().getAirlineCode().equalsIgnoreCase(response)){
+                        hasFlights = true;
+                        break;
+                    }
+                }
+                return hasFlights;
+            }
+            return false;
+        });
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
         String[] res = ask.ask();
         String flightNum = String.join("", res);
@@ -403,8 +416,8 @@ public class FlightSchedule {
      */
     private boolean airlineCodeExistsValidator(String iataCode) {
         iataCode = iataCode.trim();
-        if (iataCode.equals("") || iataCode.length() == 0)
-            return true; // Assume these exists so they will never actually be created.
+        if (iataCode.equalsIgnoreCase("") || iataCode.length() == 0)
+            return false;
         boolean exists = false;
         for (Airline a : airlines) {
             if (a.getAirlineCode().equalsIgnoreCase(iataCode)) {
