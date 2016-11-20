@@ -58,7 +58,6 @@ public class FlightSchedule {
         flights.put("DA1357", new Flight(this.getAirline("DA"), 1357, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("DEF", "A17", 'M', 1530), new DepartureArrivalInfo("PED", "A14", 'M', 1600)));
         flights.put("DA3579", new Flight(this.getAirline("DA"), 3579, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("PED", "A19", 'M', 1642), new DepartureArrivalInfo("XYZ", "A11", 'M', 1700)));
         setTime('M', 1100);
-
     }
 
     /**
@@ -397,10 +396,10 @@ public class FlightSchedule {
     }
 
     /**
-     * Validator to check if a given airline exists
+     * Validator to check if a given airline code exists
      *
      * @param iataCode airline iata code
-     * @return true if response is valid
+     * @return true if code exists
      */
     private boolean airlineCodeExistsValidator(String iataCode) {
         iataCode = iataCode.trim();
@@ -416,6 +415,12 @@ public class FlightSchedule {
         return exists;
     }
 
+    /**
+     * Validator to check if a given airline name exists
+     *
+     * @param airlineName airline name
+     * @return true of name exists
+     */
     private boolean airlineNameExistsValidator(String airlineName) {
         airlineName = airlineName.trim();
         if (airlineName.equals("") || airlineName.length() == 0)
@@ -430,12 +435,24 @@ public class FlightSchedule {
         return exists;
     }
 
+    /**
+     * Verify that airport code is valid according to IATA code format
+     *
+     * @param code Code to verify
+     * @return true if code is three characters (as that seems to be the only requirement of IATA codes)
+     */
     private boolean verifyAirportCode(String code) {
         return code.length() == 3;
     }
 
-    private boolean verifyAirportGate(String code) {
-        return code.length() == 3 || code.length() == 4;
+    /**
+     * Verify that the airport gate is valid according to common airport gates
+     *
+     * @param gate Gate to verify
+     * @return True if airport gate is three or four characters (as it seems that is common among the majority of airport gates
+     */
+    private boolean verifyAirportGate(String gate) {
+        return gate.length() == 3 || gate.length() == 4;
     }
 
     /**
@@ -471,6 +488,12 @@ public class FlightSchedule {
         return true;
     }
 
+    /**
+     * Check if a given flight ID exists
+     *
+     * @param flightId id to check
+     * @return true if map contains id, false if it does not, or if flightId is not 6 characters
+     */
     private boolean doesFlightIDExist(String flightId) {
         if (flightId.length() != 6) return false;
         return flights.containsKey(flightId);
@@ -494,8 +517,8 @@ public class FlightSchedule {
      * Sort an ArrayList of Flight objects based on time.
      *
      * @param flight    ArrayList of flight objects
-     * @param ascending If it should be ascending or decending.
-     * @return
+     * @param ascending If it should be ascending or descending.
+     * @return Sorting list
      */
     private ArrayList<Flight> sortFlights(ArrayList<Flight> flight, boolean ascending) {
         for (int i = flight.size() - 1; i >= 0; i--) {
@@ -517,6 +540,13 @@ public class FlightSchedule {
         return flight;
     }
 
+    /**
+     * Sort a list of ConnectingFlightData object based on time
+     *
+     * @param cdf       List of CFD objects
+     * @param ascending If it should be ascending or descending
+     * @return Sorted list
+     */
     private List<ConnectingFlightData> sortFlights(List<ConnectingFlightData> cdf, boolean ascending) {
         for (int i = cdf.size() - 1; i >= 0; i--) {
             for (int j = 1; j <= i; j++) {
@@ -537,6 +567,9 @@ public class FlightSchedule {
         return cdf;
     }
 
+    /**
+     * Initiates process of finding all flights between two airports.
+     */
     public void findConnectingFlights() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter origin airport: ", "There are no flights departing that airport.", (response, pastResponses) -> {
@@ -579,7 +612,7 @@ public class FlightSchedule {
         // Get paths
         List<List<String>> paths = graph.getAllPaths(res[0], res[1]);
 
-        if (paths.isEmpty()){
+        if (paths.isEmpty()) {
             System.out.printf("No available flights from %s to %s.", res[0], res[1]);
             return;
         }
@@ -607,6 +640,11 @@ public class FlightSchedule {
         presentConnectingFlights(flightPaths);
     }
 
+    /**
+     * Utility methods for findConnectingFlights to easily present connecting flights to user
+     *
+     * @param list
+     */
     private void presentConnectingFlights(List<ConnectingFlightData> list) {
         Flight f = list.get(0).getFlights().get(0); // Any flight should work, they should all start and end in the same place.
         list = sortFlights(list, true); // Sort flight
@@ -618,6 +656,14 @@ public class FlightSchedule {
             System.out.printf("%d\t\t\t%d minutes\t\t\t%s\n", data.getNumberFlights(), data.getLayoverTime(), data.getFlightOrderString());
     }
 
+    /**
+     * Get a flight that goes from departing to arriving location.
+     * Assumes there is only one flight going from departing to arrival location.
+     *
+     * @param departs Location the flight departs from
+     * @param arrives Location the flight arrives towards
+     * @return The flight that goes from departing to arrival location, or null if it does not exist.
+     */
     private Flight getFlight(String departs, String arrives) {
         for (String s : flights.keySet()) {
             Flight f = flights.get(s);
@@ -626,5 +672,4 @@ public class FlightSchedule {
         }
         return null;
     }
-
 }

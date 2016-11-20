@@ -133,5 +133,4 @@ public class Interrogator {
          */
         boolean verify(String response, String[] pastResponses);
     }
-    
 }

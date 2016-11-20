@@ -10,7 +10,14 @@ public enum FlightType {
     DOMESTIC("Domestic", 'D'),
     INTERNATIONAL("International", 'I');
 
+    /**
+     * Word for related status character
+     */
     private String description;
+
+    /**
+     * Status character
+     */
     private char typeChar;
 
     FlightType(String desc, char type) {
@@ -26,6 +33,12 @@ public enum FlightType {
         return typeChar;
     }
 
+    /**
+     * Get description for given character
+     *
+     * @param type character data type
+     * @return Description of character
+     */
     public static String getDesc(char type) {
         for (FlightType t : FlightType.values()) {
             if (t.getTypeChar() == type) {

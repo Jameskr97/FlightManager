@@ -11,22 +11,10 @@ import java.util.Scanner;
 public class Util {
 
     /**
-     * Method for getting a line of input where creating a full
-     * scanner implementation is excessive.
-     *
-     * @return Input String
-     */
-    public static String getInput() {
-        Scanner scan = new Scanner(System.in);
-        return scan.nextLine();
-    }
-
-    /**
      * Method for waiting for user to press enter. Same as above function, except doesn't return anything.
      */
     public static void safeWait() {
         Scanner scan = new Scanner(System.in);
         scan.nextLine();
     }
-
 }

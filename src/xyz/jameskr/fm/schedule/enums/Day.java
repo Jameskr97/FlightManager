@@ -15,16 +15,28 @@ public enum Day {
     Friday('F'),
     Saturday('S');
 
+    /**
+     * Char data type which the day of the week must be stored as (as the assignment requires).
+     */
     char dayChar;
 
     Day(char dayChar) {
         this.dayChar = dayChar;
     }
 
+    /**
+     * @return returns character version of character
+     */
     public char getDayChar() {
         return dayChar;
     }
 
+    /**
+     * Get enum object of character
+     *
+     * @param dayChar Character of enum object to get
+     * @return Day enum object
+     */
     public static Day getDay(char dayChar) {
         for (Day d : Day.values())
             if (d.getDayChar() == dayChar)

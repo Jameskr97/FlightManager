@@ -12,7 +12,14 @@ public enum FlightStatus {
     ARRIVED("Arrived", 'A'),
     CANCELED("Canceled", 'C');
 
+    /**
+     * Word for related status character
+     */
     private String description;
+
+    /**
+     * Status character
+     */
     private char statusChar;
 
     FlightStatus(String desc, char statusChar) {
@@ -28,6 +35,12 @@ public enum FlightStatus {
         return statusChar;
     }
 
+    /**
+     * Get description for given character
+     *
+     * @param statusChar character data type
+     * @return Description of character
+     */
     public static String getDesc(char statusChar) {
         for (FlightStatus s : FlightStatus.values()) {
             if (s.getStatusChar() == statusChar) {

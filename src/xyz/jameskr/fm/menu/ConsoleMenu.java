@@ -16,9 +16,16 @@ public class ConsoleMenu {
      * Menu options in the order they are displayed.
      */
     private ArrayList<String> menuOptions;
-    private Scanner input;
-    private String header;
 
+    /**
+     * Scanner to get input from user
+     */
+    private Scanner input;
+
+    /**
+     * Text above the line.
+     */
+    private String header;
 
     /**
      * ConsoleMenu default constructor.
@@ -31,12 +38,11 @@ public class ConsoleMenu {
 
     /**
      * Constructor which takes in array of main menu options
-     * FIXME: This constructor is horribly implemented, and it's implementation, along with MainMenuOptions must be changed.
      *
-     * @param options MainMenuOptions array
+     * @param options String array of options
      */
     public ConsoleMenu(String[] options) {
-        this(); // Calls the above constructor.
+        this();
         Collections.addAll(menuOptions, options);
     }
 
