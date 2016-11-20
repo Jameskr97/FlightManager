@@ -63,6 +63,46 @@ public class FlightSchedule {
     }
 
     /**
+     * Run method is used to run the ConsoleMenu loop.
+     */
+    public void run(){
+        ConsoleMenu menu = new ConsoleMenu("Main Menu");
+        menu.setOptions(new String[]{
+                "Set Clock", "Reset Schedule", "Manage Airlines", "Add Flight",
+                "Cancel Flight", "Show Flight Information", "Show Departures",
+                "Show Arrivals", "Find flight between airport", "Close Application"
+        });
+
+        while (true) {
+            menu.printOptions();
+            int x = menu.getResponse();
+            if (x == 0) {
+                this.setTime();
+            } else if (x == 1) {
+                this.clearSchedule();
+            } else if (x == 2) {
+                this.manageAirlines();
+            } else if (x == 3) {
+                this.addFlight();
+            } else if (x == 4) {
+                this.cancelFlight();
+            } else if (x == 5) {
+                this.getFlightInformation();
+            } else if (x == 6) {
+                this.showStatusInformation(FlightStatus.DEPARTED);
+            } else if (x == 7) {
+                this.showStatusInformation(FlightStatus.ARRIVED);
+            } else if (x == 8) {
+                this.findConnectingFlights();
+            } else if (x == 9) {
+                System.out.println("Saving...");
+                System.out.println("Thanks for using JFlightManager");
+                System.exit(0);
+            }
+        }
+    }
+
+    /**
      * Interactively the current time.
      */
     public void setTime() {

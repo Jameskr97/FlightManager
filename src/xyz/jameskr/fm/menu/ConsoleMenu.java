@@ -28,26 +28,11 @@ public class ConsoleMenu {
     private String header;
 
     /**
-     * ConsoleMenu default constructor.
+     * @param header Text that shows above the equals line
      */
-    public ConsoleMenu() {
+    public ConsoleMenu(String header) {
         menuOptions = new ArrayList<>();
         input = new Scanner(System.in);
-        this.header = "Enter a number to select your choice.";
-    }
-
-    /**
-     * Constructor which takes in array of main menu options
-     *
-     * @param options String array of options
-     */
-    public ConsoleMenu(String[] options) {
-        this();
-        Collections.addAll(menuOptions, options);
-    }
-
-    public ConsoleMenu(String header) {
-        this();
         this.header = header;
     }
 
@@ -97,4 +82,10 @@ public class ConsoleMenu {
         return res;
     }
 
+    /**
+     * @param strings String array to add to menuOptions ArrayList
+     */
+    public void setOptions(String[] strings) {
+        Collections.addAll(this.menuOptions, strings);
+    }
 }
