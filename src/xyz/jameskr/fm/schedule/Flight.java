@@ -1,6 +1,5 @@
 package xyz.jameskr.fm.schedule;
 
-import xyz.jameskr.fm.Util;
 import xyz.jameskr.fm.schedule.enums.FlightStatus;
 import xyz.jameskr.fm.schedule.enums.FlightType;
 
@@ -74,8 +73,6 @@ public class Flight {
         System.out.printf("Arrival time: %s\n", this.arrivalInfo.getTime());
         System.out.printf("Arrival airport: %s\n", this.arrivalInfo.getAirportCode());
         System.out.printf("Arrival gate: %s\n", this.arrivalInfo.getAirportGate());
-        System.out.print("Press Enter to continue.");
-        Util.safeWait();
     }
 
     /**

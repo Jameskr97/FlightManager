@@ -658,9 +658,13 @@ public class FlightSchedule {
         // If any CFD has one flight, present that flight only
         for (ConnectingFlightData c : flightPaths) {
             if (c.getNumberFlights() == 1) {
-                ArrayList<ConnectingFlightData> data = new ArrayList<>();
-                data.add(c);
-                presentConnectingFlights(data);
+                Flight f = c.getFlights().get(0);
+                System.out.println("Direct flight available:");
+                System.out.println("========================");
+                f.printFlightInfo();
+                System.out.println("========================");
+                System.out.print("Press enter to continue...");
+                Util.safeWait();
                 return;
             }
         }
