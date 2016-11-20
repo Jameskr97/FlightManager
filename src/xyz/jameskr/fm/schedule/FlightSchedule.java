@@ -272,11 +272,11 @@ public class FlightSchedule {
         });
 
         interro.addQuestion(3, "Enter departure airport code: ", "Airport code does not exist.", (response, pastResponses) -> this.verifyAirportCode(response));
-        interro.addQuestion(4, "Enter departure gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportCode(response)); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(4, "Enter departure gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportGate(response));
         interro.addQuestion(5, "Enter departure day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         interro.addQuestion(6, "Enter departure time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
         interro.addQuestion(7, "Enter arrival airport code: ", "Airport code does not exist.", (response, pastResponses) -> this.verifyAirportCode(response));
-        interro.addQuestion(8, "Enter arrival gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportGate(response)); // Is it possible for this to have an incorrect format?
+        interro.addQuestion(8, "Enter arrival gate: ", "Incorrect format.", (response, pastResponses) -> this.verifyAirportGate(response));
         interro.addQuestion(9, "Enter arrival day (U, M, T, W, R, F, S): ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         interro.addQuestion(10, "Enter arrival time (Ex: 1130, 1540, 0930): ", "Invalid time.", (response, pastResponses) -> this.isValidTime(response));
 
