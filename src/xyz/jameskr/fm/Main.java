@@ -19,17 +19,17 @@ public class Main {
                 "Show Flight Information",
                 "Show Departures",
                 "Show Arrivals",
+                "Find flight between airport",
                 "Close Application"
         };
         ConsoleMenu menu = new ConsoleMenu(options);
-
 
         while (true) {
             menu.printOptions();
             int x = menu.getResponse();
             if (x == 0) {
                 schedule.setTime();
-                
+
             } else if (x == 1) {
                 schedule.clearSchedule();
 
@@ -52,6 +52,9 @@ public class Main {
                 schedule.showStatusInformation(FlightStatus.ARRIVED);
 
             } else if (x == 8) {
+                System.out.println("Option not yet implemented");
+
+            } else if (x == 9) {
                 System.out.println("Saving...");
                 System.out.println("Thanks for using JFlightManager");
                 System.exit(0);
