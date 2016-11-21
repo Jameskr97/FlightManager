@@ -95,7 +95,6 @@ public class FlightSchedule {
             } else if (x == 8) {
                 this.findConnectingFlights();
             } else if (x == 9) {
-                System.out.println("Saving...");
                 System.out.println("Thanks for using JFlightManager");
                 System.exit(0);
             }
