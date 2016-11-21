@@ -18,7 +18,6 @@ public class Aircraft {
      */
     private String model;
 
-
     /**
      * Maximum number of economy class passengers
      */

@@ -231,7 +231,7 @@ public class FlightSchedule {
         asker.addQuestion(1, "Enter Airline code: ", "Airline code is invalid/already exists.", (response, pastResponses) -> !this.airlineCodeExistsValidator(response));
 
         String[] response = asker.ask();
-        if (response == null){
+        if (response == null) {
             System.out.println("Operation canceled.");
             return;
         }
@@ -361,7 +361,7 @@ public class FlightSchedule {
         String flightNum = String.join("", res);
         Flight f = flights.get(flightNum);
 
-        if(f.getStatus() == FlightStatus.CANCELED.getStatusChar()){
+        if (f.getStatus() == FlightStatus.CANCELED.getStatusChar()) {
             System.out.println("Flight is already canceled.");
             return;
         }

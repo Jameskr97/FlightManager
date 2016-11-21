@@ -73,5 +73,4 @@ public class ConnectingFlightData {
     public ArrayList<Flight> getFlights() {
         return flights;
     }
-
 }
