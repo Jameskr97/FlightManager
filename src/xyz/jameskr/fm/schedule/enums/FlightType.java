@@ -29,7 +29,7 @@ public enum FlightType {
         return description;
     }
 
-    public char getTypeChar() {
+    public char getChar() {
         return typeChar;
     }
 
@@ -41,7 +41,7 @@ public enum FlightType {
      */
     public static String getDesc(char type) {
         for (FlightType t : FlightType.values()) {
-            if (t.getTypeChar() == type) {
+            if (t.getChar() == type) {
                 return t.getDesc();
             }
         }

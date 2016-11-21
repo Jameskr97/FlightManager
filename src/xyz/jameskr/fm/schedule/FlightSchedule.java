@@ -53,12 +53,12 @@ public class FlightSchedule {
         airlines.add(1, new Airline("American Airlines Air", "AA"));
 
         //Add sample flight data
-        flights.put("DA1235", new Flight(this.getAirline("DA"), 1235, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1100), new DepartureArrivalInfo("QRS", "A19", 'M', 1130)));
-        flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1200), new DepartureArrivalInfo("JKR", "A19", 'M', 1300)));
-        flights.put("DA4321", new Flight(this.getAirline("DA"), 4321, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("JKR", "A13", 'M', 1330), new DepartureArrivalInfo("XYZ", "A17", 'M', 1400)));
-        flights.put("DA2468", new Flight(this.getAirline("DA"), 2468, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("ABC", "A15", 'M', 1430), new DepartureArrivalInfo("DEF", "A15", 'M', 1500)));
-        flights.put("DA1357", new Flight(this.getAirline("AA"), 1357, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("DEF", "A17", 'M', 1530), new DepartureArrivalInfo("PED", "A14", 'M', 1600)));
-        flights.put("DA3579", new Flight(this.getAirline("AA"), 3579, FlightType.DOMESTIC.getTypeChar(), new DepartureArrivalInfo("PED", "A19", 'M', 1642), new DepartureArrivalInfo("XYZ", "A11", 'M', 1700)));
+        flights.put("DA1235", new Flight(this.getAirline("DA"), 1235, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1100), new DepartureArrivalInfo("QRS", "A19", 'M', 1130)));
+        flights.put("DA1234", new Flight(this.getAirline("DA"), 1234, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1200), new DepartureArrivalInfo("JKR", "A19", 'M', 1300)));
+        flights.put("DA4321", new Flight(this.getAirline("DA"), 4321, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("JKR", "A13", 'M', 1330), new DepartureArrivalInfo("XYZ", "A17", 'M', 1400)));
+        flights.put("DA2468", new Flight(this.getAirline("DA"), 2468, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("ABC", "A15", 'M', 1430), new DepartureArrivalInfo("DEF", "A15", 'M', 1500)));
+        flights.put("AA1357", new Flight(this.getAirline("AA"), 1357, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("DEF", "A17", 'M', 1530), new DepartureArrivalInfo("PED", "A14", 'M', 1600)));
+        flights.put("AA3579", new Flight(this.getAirline("AA"), 3579, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("PED", "A19", 'M', 1642), new DepartureArrivalInfo("XYZ", "A11", 'M', 1700)));
         setTime('M', 1100);
     }
 
