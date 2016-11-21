@@ -105,7 +105,7 @@ public class FlightSchedule {
     /**
      * Interactively the current time.
      */
-    public void setTime() {
+    private void setTime() {
         Interrogator asker = new Interrogator();
         asker.addQuestion(0, "Enter new day of week: ", "That is not a valid day of the week.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         asker.addQuestion(1, "Enter new 24 hour time: ", "That is not a valid 24 hour time.", (response, pastResponses) -> this.isValidTime(response));
@@ -175,7 +175,7 @@ public class FlightSchedule {
     /**
      * Clear all flights from the dictionary.
      */
-    public void clearSchedule() {
+    private void clearSchedule() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Are you sure you want to delete all flights? (y/n): ", "Invalid boolean response.",
                 (response, pastResponses) -> this.booleanResponseValidator(response));
@@ -191,7 +191,7 @@ public class FlightSchedule {
     /**
      * Presents menu to manage airlines
      */
-    public void manageAirlines() {
+    private void manageAirlines() {
         ConsoleMenu menu = new ConsoleMenu("Manage airline menu");
         menu.addOption(0, "List Airlines");
         menu.addOption(1, "Add Airline");
@@ -291,7 +291,7 @@ public class FlightSchedule {
     /**
      * Add a flight using the Interrogator class.
      */
-    public void addFlight() {
+    private void addFlight() {
         Interrogator interro = new Interrogator();
         interro.addQuestion(0, "Enter Airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
 
@@ -342,7 +342,7 @@ public class FlightSchedule {
     /**
      * Cancels flights that are in the database
      */
-    public void cancelFlight() {
+    private void cancelFlight() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist or has no flights.", (response, pastResponses) -> {
             if (this.airlineCodeExistsValidator(response)) {
@@ -386,7 +386,7 @@ public class FlightSchedule {
     /**
      * Prints flight information based on given airline code and flight number
      */
-    public void getFlightInformation() {
+    private void getFlightInformation() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airline Code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
@@ -405,7 +405,7 @@ public class FlightSchedule {
      *
      * @param status Status to show, (must be arrived or departed)
      */
-    public void showStatusInformation(FlightStatus status) {
+    private void showStatusInformation(FlightStatus status) {
         if (status != FlightStatus.DEPARTED && status != FlightStatus.ARRIVED) return;
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airport code: ", "Invalid code.", (response, pastResponses) -> response.length() == 3);
@@ -582,7 +582,7 @@ public class FlightSchedule {
     }
 
     /**
-     * Sort an ArrayList of Flight objects based on time.
+     * Sort an ArrayList of Flight objects based on time. Using optimized bubble sort.
      *
      * @param flight    ArrayList of flight objects
      * @param ascending If it should be ascending or descending.
@@ -609,7 +609,7 @@ public class FlightSchedule {
     }
 
     /**
-     * Sort a list of ConnectingFlightData object based on time
+     * Sort a list of ConnectingFlightData object based on time. Using optimized bubble sort.
      *
      * @param cdf       List of CFD objects
      * @param ascending If it should be ascending or descending
@@ -638,7 +638,7 @@ public class FlightSchedule {
     /**
      * Initiates process of finding all flights between two airports.
      */
-    public void findConnectingFlights() {
+    private void findConnectingFlights() {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter origin airport: ", "There are no flights departing that airport.", (response, pastResponses) -> {
             boolean hasDeparting = false;
