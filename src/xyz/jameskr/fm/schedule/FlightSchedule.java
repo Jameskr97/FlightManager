@@ -70,7 +70,7 @@ public class FlightSchedule {
         menu.setOptions(new String[]{
                 "Set Clock", "Reset Schedule", "Manage Airlines", "Add Flight",
                 "Cancel Flight", "Show Flight Information", "Show Departures",
-                "Show Arrivals", "Find flight between airport", "Close Application"
+                "Show Arrivals", "Find flight between airports", "Close Application"
         });
 
         while (true) {
