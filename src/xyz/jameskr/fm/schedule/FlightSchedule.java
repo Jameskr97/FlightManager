@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Class which stores information about flight schedule.
+ * Class which stores information and manages everything related to the flight schedule.
  *
  * @author James 
  * @date 11/13/16
@@ -39,7 +39,7 @@ public class FlightSchedule {
     /**
      * Map to store every flight
      */
-    private HashMap<String, Flight> flights; // Flight code, flight
+    private HashMap<String, Flight> flights;
 
     /**
      * Class Constructor. Initializes above variables and adds sample data for faster testing.
@@ -118,7 +118,6 @@ public class FlightSchedule {
         this.setTime(this.dayOfWeek, this.currentTime);
         System.out.printf("Day set to %c and time set to %d.\nPress Enter to continue.", this.dayOfWeek, this.currentTime);
         Util.safeWait();
-
     }
 
     /**
@@ -136,7 +135,6 @@ public class FlightSchedule {
             // Don't touch the canceled flights.
             if (f.getStatus() == FlightStatus.CANCELED.getStatusChar())
                 continue;
-
 
             DepartureArrivalInfo arrive = f.getArriveInfo(), depart = f.getDepartInfo();
 
@@ -158,16 +156,12 @@ public class FlightSchedule {
             if (Day.getDay(arrive.getDayOfWeek()).ordinal() == Day.getDay(dayOfWeek).ordinal()) {
                 if (arrive.getTime() <= timeNow) { // And the arrive time is before now
                     f.setStatus(FlightStatus.ARRIVED); // They arrived
-                    continue;
                 } else if (arrive.getTime() > timeNow && timeNow > depart.getTime()) { // If the arrive time is after now, but depart time is before now
                     f.setStatus(FlightStatus.DEPARTED); // We're departed
-                    continue;
                 } else if (timeNow < depart.getTime()) { // Else if depart time is after now...
                     f.setStatus(FlightStatus.SCHEDULED);  // We're scheduled
                 }
             }
-
-
         }
     }
 
@@ -211,8 +205,6 @@ public class FlightSchedule {
                 break;
             }
         }
-
-
     }
 
     /**
@@ -239,7 +231,10 @@ public class FlightSchedule {
         asker.addQuestion(1, "Enter Airline code: ", "Airline code is invalid/already exists.", (response, pastResponses) -> !this.airlineCodeExistsValidator(response));
 
         String[] response = asker.ask();
-        if (response == null) return;
+        if (response == null){
+            System.out.println("Operation canceled.");
+            return;
+        }
 
         // Create airline...
         Airline airline = new Airline(response[0], response[1]);
@@ -437,7 +432,6 @@ public class FlightSchedule {
 
         // Sort arrivals based on time (Bubble sort)
         dFlights = sortFlights(dFlights, true);
-
 
         System.out.printf("Current time is %d. %s %s:\n", this.currentTime, airportCode, (status == FlightStatus.DEPARTED ? "departures" : "arrivals"));
         System.out.printf("====================================================\n");
@@ -727,7 +721,7 @@ public class FlightSchedule {
     /**
      * Utility methods for findConnectingFlights to easily present connecting flights to user
      *
-     * @param list
+     * @param list List of ConnectingFlightData
      */
     private void presentConnectingFlights(List<ConnectingFlightData> list) {
         Flight f = list.get(0).getFlights().get(0); // Any flight should work, they should all start and end in the same place.
