@@ -65,7 +65,7 @@ public class FlightSchedule {
     /**
      * Run method is used to run the ConsoleMenu loop.
      */
-    public void run(){
+    public void run() {
         ConsoleMenu menu = new ConsoleMenu("Main Menu");
         menu.setOptions(new String[]{
                 "Set Clock", "Reset Schedule", "Manage Airlines", "Add Flight",
@@ -267,9 +267,13 @@ public class FlightSchedule {
         Interrogator last = new Interrogator();
         String question = String.format("Are you sure you want to remove airline %s and all associated flights? (y/n): ", a.getName());
         last.addQuestion(0, question, "Invliad boolean response", (response, pastResponses) -> this.booleanResponseValidator(response));
-        String ans = last.ask()[0];
+        String[] res2 = last.ask();
+        if (res2 == null) {
+            System.out.println("Operation canceled.");
+            return;
+        }
 
-        if (ans.equalsIgnoreCase("y")) {
+        if (res2[0].equalsIgnoreCase("y")) {
             ArrayList<String> flightsToRemove = new ArrayList<>();
             for (String s : flights.keySet()) {
                 Flight f = flights.get(s);
@@ -289,19 +293,17 @@ public class FlightSchedule {
      */
     public void addFlight() {
         Interrogator interro = new Interrogator();
-        interro.addQuestion(0, "Enter Airline code: ", "Airline code does not exist.", (response, pastResponses) -> {
-            boolean exists = false;
-            for (Airline a : airlines) {
-                if (a.getAirlineCode().equals(response)) {
-                    exists = true;
-                    break;
-                }
-            }
-            return exists;
-        });
+        interro.addQuestion(0, "Enter Airline code: ", "Airline code does not exist.", (response, pastResponses) -> this.airlineCodeExistsValidator(response));
 
-        interro.addQuestion(1, "Enter flight number: ", "Flight number is invalid/already exists.",
-                (response, pastResponses) -> !this.doesFlightIDExist(pastResponses[0] + response));
+        interro.addQuestion(1, "Enter flight number: ", "Flight number is invalid/already exists.", (response, pastResponses) -> {
+            if (response.length() != 4) return false;
+            boolean isNumber = true;
+            try {
+                Integer.valueOf(response); // If it can't be converted to an integer, than it's not a response we're looking for.
+            } catch (Exception e) {
+            }
+            return isNumber && !this.doesFlightIDExist(pastResponses[0] + response);
+        });
 
 
         interro.addQuestion(2, "Enter flight type (D -> Domestic, I -> International): ", (response, pastResponses) -> {
@@ -344,11 +346,10 @@ public class FlightSchedule {
         Interrogator ask = new Interrogator();
         ask.addQuestion(0, "Enter airline code: ", "Airline code does not exist or has no flights.", (response, pastResponses) -> {
             if (this.airlineCodeExistsValidator(response)) {
-                System.out.println("INSIDE");
                 boolean hasFlights = false;
                 for (String s : flights.keySet()) {
                     Flight f = flights.get(s);
-                    if (f.getAirline().getAirlineCode().equalsIgnoreCase(response)){
+                    if (f.getAirline().getAirlineCode().equalsIgnoreCase(response)) {
                         hasFlights = true;
                         break;
                     }
@@ -359,9 +360,17 @@ public class FlightSchedule {
         });
         ask.addQuestion(1, "Enter flight number: ", "Flight number does not exist.", (response, pastResponses) -> flights.containsKey(pastResponses[0] + response));
         String[] res = ask.ask();
+        if (res == null) {
+            System.out.println("Operation canceled.");
+            return;
+        }
         String flightNum = String.join("", res);
         Flight f = flights.get(flightNum);
 
+        if(f.getStatus() == FlightStatus.CANCELED.getStatusChar()){
+            System.out.println("Flight is already canceled.");
+            return;
+        }
         Interrogator confirm = new Interrogator();
         confirm.addQuestion(0, String.format("Are you sure you want to cancel flight %s going from %s to %s? (y/n): ", flightNum, f.getDepartInfo().getAirportCode(), f.getArriveInfo().getAirportCode()), (response, pastResponses) -> this.booleanResponseValidator(response));
         String[] ans = confirm.ask();
@@ -402,6 +411,10 @@ public class FlightSchedule {
         ask.addQuestion(0, "Enter airport code: ", "Invalid code.", (response, pastResponses) -> response.length() == 3);
         ask.addQuestion(1, "Enter day: ", "Invalid day.", (response, pastResponses) -> this.isDayOfWeekChar(response));
         String[] res = ask.ask();
+        if (res == null) {
+            System.out.println("Operation canceled.");
+            return;
+        }
         String airportCode = res[0];
         char dayOfWeek = res[1].charAt(0);
 
