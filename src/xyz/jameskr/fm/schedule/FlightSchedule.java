@@ -49,8 +49,8 @@ public class FlightSchedule {
         flights = new HashMap<>();
 
         //Add sample airline data
-        airlines.add(0, new Airline("Delta Air", "DA"));
-        airlines.add(1, new Airline("American Airlines Air", "AA"));
+        airlines.add(0, new Airline("Delta Airlines", "DA"));
+        airlines.add(1, new Airline("American Airlines", "AA"));
 
         //Add sample flight data
         flights.put("DA1235", new Flight(this.getAirline("DA"), 1235, FlightType.DOMESTIC.getChar(), new DepartureArrivalInfo("ABC", "A11", 'M', 1100), new DepartureArrivalInfo("QRS", "A19", 'M', 1130)));
